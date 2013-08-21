@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game round:</b>
+  <%= @gameboard.game_round_id %>
+</p>
+
+<p>
+  <b>Gridsize:</b>
+  <%= @gameboard.gridsize %>
+</p>
+
+<p>
+  <b>Player1 start position:</b>
+  <%= @gameboard.player1_start_position %>
+</p>
+
+<p>
+  <b>Player2 start position:</b>
+  <%= @gameboard.player2_start_position %>
+</p>
+
+<p>
+  <b>Goal:</b>
+  <%= @gameboard.goal %>
+</p>
+
+
+<%=render :partial => "gameboard"%>
+
+<%= link_to 'Edit', edit_gameboard_path(@gameboard) %> |
+<%= link_to 'Back', gameboards_path %>

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game round:</b>
+  <%= @player_color_bucket.game_round_id %>
+</p>
+
+<p>
+  <b>Player:</b>
+  <%= @player_color_bucket.player_id %>
+</p>
+
+<p>
+  <b>Color pallet:</b>
+  <%= @player_color_bucket.color_pallet_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_player_color_bucket_path(@player_color_bucket) %> |
+<%= link_to 'Back', player_color_buckets_path %>

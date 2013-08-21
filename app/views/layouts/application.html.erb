@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>EmotionTrust</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <%= javascript_include_tag "application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+
+<div class="container">
+    <div class="header">
+		<div style="float: left; width: 200px;">
+		<h1>Colored Trails</h1>
+		</div>
+		<div style="float: right; margin-right: 20px; padding-left: 5px;  border-left: 2px solid #FFFFFF;">
+			<% if session[:player_id]%>
+				<%= image_tag "MaleAvatar.JPG"%> Howdy! <%=Player.find(session[:player_id]).name%> (<%= link_to "Logout", controller: :players, action: :login%>)
+			<% end%>
+		</div>
+		
+	</div>
+	<div style="clear:both;"></div> <!-- This clears the two floats, thus giving "container" layout -->
+	
+	<% if session[:player_id]%>
+	<div class="navigation">
+			<%=link_to "My Games", :controller=> :players, :action=> :player_games%>
+			
+			<%if Player.find(session[:player_id]).admin_status%>
+				| 
+				<%=link_to "Players", players_path%> |
+				<%=link_to "Games", games_path%> |
+				<%=link_to "Game Rounds", game_rounds_path%> |
+				<%=link_to "Game Boards", gameboards_path%> |
+				<%=link_to "Mood States", moods_path%> |
+				<%=link_to "Emotion States", emotions_path%> |
+				<%=link_to "Expecatation States ", expectations_path%> |
+				<%=link_to "Commitment States", commitments_path%> |
+				<%=link_to "Trust States", trusts_path%>
+			<%end%>
+
+	</div>
+	<% end%>
+	
+	<div class="body">
+	<%= yield %>
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<h1><%#=link_to "Your Games", player_games %> > Game Rounds</h1>
+
+<table>
+  <tr>
+    <th>Round Number</th>
+	<th>Game Round Status</th>
+    <th>Opponent Status</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @game_rounds.each_with_index do |game_round, index| %>
+  <tr>
+    <td>
+		Round <%= index+1%>
+	</td>
+	<td>
+		<%=game_round.game_round_status%>
+	</td>
+	<td>
+		<%if @player.id == @game.player1_id%>
+			<%= game_round.player2_status %>
+		<%else%>
+			<%= game_round.player1_status %>
+		<%end%>
+	</td>
+    <td><%= link_to 'Play', controller: :players, action: :expectation_measure_form, :id => game_round.id %></td>
+  </tr>
+<% end %>
+</table>

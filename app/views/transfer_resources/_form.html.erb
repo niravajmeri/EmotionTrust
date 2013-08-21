@@ -1,0 +1,37 @@
+<%= form_for(@transfer_resource) do |f| %>
+  <% if @transfer_resource.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transfer_resource.errors.count, "error") %> prohibited this transfer_resource from being saved:</h2>
+
+      <ul>
+      <% @transfer_resource.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_round_id %><br />
+    <%= f.number_field :game_round_id %>
+  </div>
+  <div class="field">
+    <%= f.label :player_id %><br />
+    <%= f.number_field :player_id %>
+  </div>
+  <div class="field">
+    <%= f.label :opponent_id %><br />
+    <%= f.number_field :opponent_id %>
+  </div>
+  <div class="field">
+    <%= f.label :color_pallet_id %><br />
+    <%= f.number_field :color_pallet_id %>
+  </div>
+  <div class="field">
+    <%= f.label :quantity %><br />
+    <%= f.number_field :quantity %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

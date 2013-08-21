@@ -1,0 +1,2 @@
+module ColorPalletsHelper
+end

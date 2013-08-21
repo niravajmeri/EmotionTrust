@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  player1_player2_emotion: 1
+  player2_player1_emotion: 1
+  player1_player2_expectation: 1
+  player2_player1_expecatation: 1
+
+two:
+  game_id: 1
+  player1_player2_emotion: 1
+  player2_player1_emotion: 1
+  player1_player2_expectation: 1
+  player2_player1_expecatation: 1

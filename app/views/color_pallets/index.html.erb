@@ -1,0 +1,23 @@
+<h1>Listing color_pallets</h1>
+
+<table>
+  <tr>
+    <th>Color</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @color_pallets.each do |color_pallet| %>
+  <tr>
+    <td><%= color_pallet.color %></td>
+    <td><%= link_to 'Show', color_pallet %></td>
+    <td><%= link_to 'Edit', edit_color_pallet_path(color_pallet) %></td>
+    <td><%= link_to 'Destroy', color_pallet, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Color pallet', new_color_pallet_path %>

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_round_id: 1
+  gridsize: 1
+  player1_start_position: 1
+  player2_start_position: 1
+  goal: 1
+
+two:
+  game_round_id: 1
+  gridsize: 1
+  player1_start_position: 1
+  player2_start_position: 1
+  goal: 1

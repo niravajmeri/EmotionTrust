@@ -1,0 +1,27 @@
+<h1>Listing player_color_buckets</h1>
+
+<table>
+  <tr>
+    <th>Game round</th>
+    <th>Player</th>
+    <th>Color pallet</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @player_color_buckets.each do |player_color_bucket| %>
+  <tr>
+    <td><%= player_color_bucket.game_round_id %></td>
+    <td><%= player_color_bucket.player_id %></td>
+    <td><%= player_color_bucket.color_pallet_id %></td>
+    <td><%= link_to 'Show', player_color_bucket %></td>
+    <td><%= link_to 'Edit', edit_player_color_bucket_path(player_color_bucket) %></td>
+    <td><%= link_to 'Destroy', player_color_bucket, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Player color bucket', new_player_color_bucket_path %>

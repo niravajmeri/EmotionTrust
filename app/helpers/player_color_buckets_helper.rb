@@ -1,0 +1,2 @@
+module PlayerColorBucketsHelper
+end

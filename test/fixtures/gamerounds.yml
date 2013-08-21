@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_id: 1
+  player1_move: MyString
+  integer: MyString
+  player2_move: MyString
+  integer: MyString
+  player1_emotion: MyString
+  integer: MyString
+  player2: MyString
+  emotion: MyString
+  player1_expectation: MyString
+  integer: MyString
+  player2_expectation: MyString
+  integer: MyString
+
+two:
+  game_id: 1
+  player1_move: MyString
+  integer: MyString
+  player2_move: MyString
+  integer: MyString
+  player1_emotion: MyString
+  integer: MyString
+  player2: MyString
+  emotion: MyString
+  player1_expectation: MyString
+  integer: MyString
+  player2_expectation: MyString
+  integer: MyString

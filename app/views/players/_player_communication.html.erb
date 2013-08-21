@@ -1,0 +1,29 @@
+<section class="module" id="communication_module">
+
+  <ol class="discussion" id="discussion">
+	<% @player_communications.each do |player_communication| %>	
+		<%if player_communication.player_id == session[:player_id]%>
+			<li class="self">
+				<div class="avatar">
+					<%=image_tag "You.png", :style=> "width: 40px;"%>
+				</div>
+				<div class="messages">
+					<p><%=player_communication.message%></p>
+				</div>
+			</li>
+		<%else%>
+			<li class="other">
+				<div class="avatar">
+					<%=image_tag "P2.png", :style=> "width: 40px;"%>
+				</div>
+				<div class="messages">
+					<p><%=player_communication.message%></p>
+				</div>
+			</li>
+		<%end%>
+	<%end%>
+  </ol>
+  
+  <hr style="border: 2px solid #D0D0D0;"/>
+  
+</section>

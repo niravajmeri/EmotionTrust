@@ -1,0 +1,27 @@
+<h1>Listing player_communications</h1>
+
+<table>
+  <tr>
+    <th>Game round</th>
+    <th>Player</th>
+	<th>Message</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @player_communications.each do |player_communication| %>
+  <tr>
+    <td><%= player_communication.game_round_id %></td>
+    <td><%= player_communication.player_id %></td>
+	<td><%= player_communication.message%></td>
+    <td><%= link_to 'Show', player_communication %></td>
+    <td><%= link_to 'Edit', edit_player_communication_path(player_communication) %></td>
+    <td><%= link_to 'Destroy', player_communication, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Player communication', new_player_communication_path %>

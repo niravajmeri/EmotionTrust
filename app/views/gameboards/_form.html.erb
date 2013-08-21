@@ -1,0 +1,37 @@
+<%= form_for(@gameboard) do |f| %>
+  <% if @gameboard.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@gameboard.errors.count, "error") %> prohibited this gameboard from being saved:</h2>
+
+      <ul>
+      <% @gameboard.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_round_id %><br />
+    <%= f.number_field :game_round_id %>
+  </div>
+  <div class="field">
+    <%= f.label :gridsize %><br />
+    <%= f.number_field :gridsize %>
+  </div>
+  <div class="field">
+    <%= f.label :player1_start_position %><br />
+    <%= f.number_field :player1_start_position %>
+  </div>
+  <div class="field">
+    <%= f.label :player2_start_position %><br />
+    <%= f.number_field :player2_start_position %>
+  </div>
+  <div class="field">
+    <%= f.label :goal %><br />
+    <%= f.number_field :goal %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

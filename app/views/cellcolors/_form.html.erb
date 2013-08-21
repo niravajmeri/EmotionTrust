@@ -1,0 +1,29 @@
+<%= form_for(@cellcolor) do |f| %>
+  <% if @cellcolor.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cellcolor.errors.count, "error") %> prohibited this cellcolor from being saved:</h2>
+
+      <ul>
+      <% @cellcolor.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :gameboard_id %><br />
+    <%= f.number_field :gameboard_id %>
+  </div>
+  <div class="field">
+    <%= f.label :cellnumber %><br />
+    <%= f.number_field :cellnumber %>
+  </div>
+  <div class="field">
+    <%= f.label :color_pallet_id %><br />
+    <%= f.number_field :color_pallet_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

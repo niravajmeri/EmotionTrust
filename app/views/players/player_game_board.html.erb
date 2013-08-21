@@ -1,0 +1,169 @@
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+	//you can now use $ as your jQuery object.
+		var body = $( 'body' );
+		jQuery('#moveup').click(refreshTableMoveUp);
+		jQuery('#movedown').click(refreshTableMoveDown);
+		jQuery('#moveleft').click(refreshTableMoveLeft);
+		jQuery('#moveright').click(refreshTableMoveRight);
+		//jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
+		//jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
+		//refreshCommunication();
+		//refreshTable();
+
+		
+	});
+
+
+    function refreshTable(){
+        jQuery('#gameboard').load("game_board?gameboard_id=<%=@gameboard.id%>", function(){
+           setTimeout(refreshTable, 10000);
+        });
+    }
+	
+	function refreshCommunication(){
+		jQuery('#player_communication').load("player_communication?gameboard_id=<%=@gameboard.id%>", function(){
+           setTimeout(refreshCommunication, 10000);
+		   jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
+        });
+		
+		//jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
+	}
+	
+	function refreshTableMoveUp(){
+		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=up", function(){
+		//alert("Up");
+        });
+	}
+	function refreshTableMoveDown(){
+		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=down", function(){
+		//alert("Up");
+        });
+	}
+	function refreshTableMoveLeft(){
+		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=left", function(){
+		//alert("Up");
+        });
+	}
+	function refreshTableMoveRight(){
+		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=right", function(){
+		//alert("Up");
+        });
+	}
+	
+	
+</script>
+
+<table style="width:100%">
+	<tr>
+		<td style="border-right: 2px solid #CCCCCC; width: 300px; vertical-align: top; ">
+			<div id="phases">
+				<h2>Game Phases</h2>
+				<ul>
+					<li>Strategize
+					<p>Players analyse their position on the board and the plates in their bucket, and come up with a strategy to maximise their points.</p>
+					</li>
+					<li>Communicate
+					<p>Players communicate with each other and mutually agree to transfer plates.</p>
+					</li>
+					<li>Transfer
+					<p>Players transfer the plates agreed upon during the communication phase.</p>
+					</li>
+					<li>Movement
+					<p>Players use the available plates to reach the goal.</p>
+					</li>
+				</ul>
+				
+				<h3>Scoring</h3>
+				<p>
+				For players who did not reach the goal:<br/>
+				SCORE = number of chips you have + 1.5 x number of squares travelled
+				</p>
+				<p>
+				For players who reached the goal:<br/>
+				SCORE = number of chips you have + 3.0 x number of squares travelled
+				</p>
+				
+			</div>
+		</td>
+		<td style="border-right: 2px solid #CCCCCC; vertical-align: top; ">
+			<div id="playarea">
+				<h2>Play Area</h2>
+					
+				<table id="gameboard">
+				<%= render :partial => "gameboard"%>
+				</table>
+				
+				<div id="gamecontrols">
+					
+					<%#=link_to image_tag("up64x64.png"), :controller => :players, :action => :move, :direction => "up", :gameboard_id => @gameboard.id%>
+					<%#=link_to image_tag("down64x64.png"), :controller => :players, :action => :move, :direction => "down", :gameboard_id => @gameboard.id%>
+					<%#=link_to image_tag("left64x64.png"), :controller => :players, :action => :move, :direction => "left", :gameboard_id => @gameboard.id%>
+					<%#=link_to image_tag("right64x64.png"), :controller => :players, :action => :move, :direction => "right", :gameboard_id => @gameboard.id%>
+					
+					<%#=link_to_remote "Move Left", :url=>{:action => :move, :direction => "left"}%>
+					
+					<a id="moveup" href="#"><%=image_tag("up64x64.png")%></a>
+					<a id="movedown" href="#"><%=image_tag("down64x64.png")%></a>
+					<a id="moveleft" href="#"><%=image_tag("left64x64.png")%></a>
+					<a id="moveright" href="#"><%=image_tag("right64x64.png")%></a>
+				</div>
+				
+				<div id="playerbucket">
+				
+					<table style="margin: 0px auto; border: 2px solid #A0A0A0; width: 420px;">
+						<tr>
+							<td style="background-color: #CCCCCC;">You</td>
+						<%@color_pallet = ColorPallet.all%>
+						<%@color_pallet.each_with_index do |color, index|%>
+							<td style="width:40px; height:20px; background-color: <%=color.color%> ">
+								<%#=@player1_color_bucket[index]%>
+							</td>
+						<%end%>
+							<td style="background-color: #CCCCCC;">Score</td>
+							<td style="background-color: #CCCCCC;"><%#=player1_score%>-</td>
+						</tr>
+
+						<tr>
+							<td style="background-color: #CCCCCC;">Player 2</td>
+						<%@color_pallet.each_with_index do |color, index|%>
+							<td style="width:40px; height:20px; background-color: <%=color.color%> ">
+								<%#=@player2_color_bucket[index]%>
+							</td>
+						<%end%>
+							<td style="background-color: #CCCCCC;">Score</td>
+							<td style="background-color: #CCCCCC;"><%#=player2_score%>-</td>
+						</tr>
+					</table>
+					
+				</div>
+				
+				
+				
+			</div>		
+		
+		</td>
+		<td style="width: 300px; vertical-align: top;">
+			<div>
+				<h2>Communication</h2>
+				<div id="communication">
+					<div  id="player_communication" style="height: 350px;">
+						<%= render :partial => "player_communication"%>
+					</div>
+					<div>
+						<%= form_tag "create_player_communication", :method => :get, :remote => true do %>
+							<%= hidden_field_tag :player_id, session[:player_id]%>
+							<%= hidden_field_tag :gameboard_id, @gameboard.id%>
+							<%= text_field_tag :message, "", :style => "width: 240px; height: 50px; border: 2px solid #D0D0D0;"%>
+							<%= submit_tag "Send", :name => nil %>
+						<% end %>
+					</div>
+					
+				</div>
+
+			</div>
+
+		</td>
+	</tr>
+</table>	
+

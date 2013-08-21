@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  game_round_id: 1
+  player_id: 1
+  opponent_id: 1
+  color_pallet_id: 1
+  quantity: 1
+
+two:
+  game_round_id: 1
+  player_id: 1
+  opponent_id: 1
+  color_pallet_id: 1
+  quantity: 1

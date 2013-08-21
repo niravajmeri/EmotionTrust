@@ -1,0 +1,23 @@
+<h1>Listing trusts</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @trusts.each do |trust| %>
+  <tr>
+    <td><%= trust.name %></td>
+    <td><%= link_to 'Show', trust %></td>
+    <td><%= link_to 'Edit', edit_trust_path(trust) %></td>
+    <td><%= link_to 'Destroy', trust, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Trust', new_trust_path %>

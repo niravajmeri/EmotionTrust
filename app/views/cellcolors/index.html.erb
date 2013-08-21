@@ -1,0 +1,27 @@
+<h1>Listing cellcolors</h1>
+
+<table>
+  <tr>
+    <th>Gameboard</th>
+    <th>Cellnumber</th>
+    <th>Color pallet</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cellcolors.each do |cellcolor| %>
+  <tr>
+    <td><%= cellcolor.gameboard_id %></td>
+    <td><%= cellcolor.cellnumber %></td>
+    <td><%= cellcolor.color_pallet_id %></td>
+    <td><%= link_to 'Show', cellcolor %></td>
+    <td><%= link_to 'Edit', edit_cellcolor_path(cellcolor) %></td>
+    <td><%= link_to 'Destroy', cellcolor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Cellcolor', new_cellcolor_path %>

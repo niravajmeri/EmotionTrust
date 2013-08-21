@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game:</b>
+  <%= @game_round.game_id %>
+</p>
+
+<p>
+  <b>Player1 player2 emotion:</b>
+  <%= @game_round.player1_player2_emotion %>
+</p>
+
+<p>
+  <b>Player2 player1 emotion:</b>
+  <%= @game_round.player2_player1_emotion %>
+</p>
+
+<p>
+  <b>Player1 player2 expectation:</b>
+  <%= @game_round.player1_player2_expectation %>
+</p>
+
+<p>
+  <b>Player2 player1 expecatation:</b>
+  <%= @game_round.player2_player1_expecatation %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_round_path(@game_round) %> |
+<%= link_to 'Back', game_rounds_path %>

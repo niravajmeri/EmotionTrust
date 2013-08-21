@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  player1_id: 1
+  player2_id: 1
+  player1_start_mood: 1
+  player1_end_mood: 1
+  player2_start_mood: 1
+  player2_end_mood: 1
+  player1_player2_start_trust: 1
+  player1_player2_end_trust: 1
+  player2_player1_start_trust: 1
+  player2_player1_end_trust: 1
+
+two:
+  player1_id: 1
+  player2_id: 1
+  player1_start_mood: 1
+  player1_end_mood: 1
+  player2_start_mood: 1
+  player2_end_mood: 1
+  player1_player2_start_trust: 1
+  player1_player2_end_trust: 1
+  player2_player1_start_trust: 1
+  player2_player1_end_trust: 1

@@ -1,0 +1,31 @@
+<h1>Listing gameboards</h1>
+
+<table>
+  <tr>
+    <th>Game round</th>
+    <th>Gridsize</th>
+    <th>Player1 start position</th>
+    <th>Player2 start position</th>
+    <th>Goal</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @gameboards.each do |gameboard| %>
+  <tr>
+    <td><%= gameboard.game_round_id %></td>
+    <td><%= gameboard.gridsize %></td>
+    <td><%= gameboard.player1_start_position %></td>
+    <td><%= gameboard.player2_start_position %></td>
+    <td><%= gameboard.goal %></td>
+    <td><%= link_to 'Show', gameboard %></td>
+    <td><%= link_to 'Edit', edit_gameboard_path(gameboard) %></td>
+    <td><%= link_to 'Destroy', gameboard, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Gameboard', new_gameboard_path %>

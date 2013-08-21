@@ -1,0 +1,29 @@
+<%= form_for(@player_color_bucket) do |f| %>
+  <% if @player_color_bucket.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@player_color_bucket.errors.count, "error") %> prohibited this player_color_bucket from being saved:</h2>
+
+      <ul>
+      <% @player_color_bucket.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :game_round_id %><br />
+    <%= f.number_field :game_round_id %>
+  </div>
+  <div class="field">
+    <%= f.label :player_id %><br />
+    <%= f.number_field :player_id %>
+  </div>
+  <div class="field">
+    <%= f.label :color_pallet_id %><br />
+    <%= f.number_field :color_pallet_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

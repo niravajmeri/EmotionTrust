@@ -1,0 +1,31 @@
+<h1>Listing transfer_resources</h1>
+
+<table>
+  <tr>
+    <th>Game round</th>
+    <th>Player</th>
+    <th>Opponent</th>
+    <th>Color pallet</th>
+    <th>Quantity</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @transfer_resources.each do |transfer_resource| %>
+  <tr>
+    <td><%= transfer_resource.game_round_id %></td>
+    <td><%= transfer_resource.player_id %></td>
+    <td><%= transfer_resource.opponent_id %></td>
+    <td><%= transfer_resource.color_pallet_id %></td>
+    <td><%= transfer_resource.quantity %></td>
+    <td><%= link_to 'Show', transfer_resource %></td>
+    <td><%= link_to 'Edit', edit_transfer_resource_path(transfer_resource) %></td>
+    <td><%= link_to 'Destroy', transfer_resource, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Transfer resource', new_transfer_resource_path %>

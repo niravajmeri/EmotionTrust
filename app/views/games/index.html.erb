@@ -1,0 +1,48 @@
+<h1>Listing games</h1>
+
+<table>
+  <tr>
+    <th>Player1</th>
+    <th>Player2</th>
+    <th>Player1 start mood</th>
+    <th>Player1 end mood</th>
+    <th>Player2 start mood</th>
+    <th>Player2 end mood</th>
+    <th>Player1 player2 start trust</th>
+    <th>Player1 player2 end trust</th>
+    <th>Player2 player1 start trust</th>
+    <th>Player2 player1 end trust</th>
+	<th>Game status</th>
+	<th>Number of rounds</th>
+	<th>Round generate status</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @games.each do |game| %>
+  <tr>
+    <td><%= game.player1.name %></td>
+    <td><%= game.player2.name %></td>
+    <td><%= game.player1_start_mood %></td>
+    <td><%= game.player1_end_mood %></td>
+    <td><%= game.player2_start_mood %></td>
+    <td><%= game.player2_end_mood %></td>
+    <td><%= game.player1_player2_start_trust %></td>
+    <td><%= game.player1_player2_end_trust %></td>
+    <td><%= game.player2_player1_start_trust %></td>
+    <td><%= game.player2_player1_end_trust %></td>
+	<td><%= game.game_status %></td>
+    <td><%= game.number_of_rounds %></td>
+	<td><%= game.round_generate_status %></td>
+	<td><%= link_to 'Generate Game Rounds', :action => :generate_game_rounds, :id => game.id %></td>
+    <td><%= link_to 'Show', game %></td>
+    <td><%= link_to 'Edit', edit_game_path(game) %></td>
+    <td><%= link_to 'Destroy', game, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Game', new_game_path %>

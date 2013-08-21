@@ -1,0 +1,9 @@
+<div class="body" style="width:50%; height: 300px; text-align: center; vertical-align: middle; display: table-cell; margin: 0 auto;">
+	
+<%= form_tag :controller => :players, :action=> :login_check do%>
+    <%= text_field_tag :email, "Your email here", :size => 40, style: "font-size: 24px"%>
+
+    <%= submit_tag "Submit"%>
+
+<%end%>
+</div>

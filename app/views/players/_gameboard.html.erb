@@ -1,0 +1,26 @@
+<%cellnum = 1%>
+<%for row in 1..@gameboard.gridsize%>
+  <tr style="">
+		<%for col in 1..@gameboard.gridsize%>
+			  <%#cell_color = @color_pallet[@cell_color[cellnum-1]]%>
+			  <td style="background-color: <%=ColorPallet.find(@gameboard.cellcolors[cellnum-1].color_pallet_id).color%>" id='row<%=row%>col<%=col%>'>
+			  <%p "Cellnum #{cellnum} #{@gameboard.cellcolors[cellnum-1].color_pallet_id}"%>
+			  
+				<% if @game_round.player1_status and @game_round.player2_status%>
+				<%if(@player_current_position == cellnum)%>
+					<%=image_tag "You.png"%>
+				<%end%>
+				<%if(@opponent_current_position == cellnum)%>
+					<%=image_tag "P2.png"%>
+				<%end%>
+				
+				<%if(cellnum == @gameboard.goal)%>
+					<%=image_tag "goal38x38.PNG"%>
+				<%end%>
+				<%end%>
+				
+				<%cellnum+=1%>
+			  </td>
+		<%end%>
+  </tr>
+<%end%>

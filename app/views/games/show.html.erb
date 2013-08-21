@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Player1:</b>
+  <%= @game.player1_id %>
+</p>
+
+<p>
+  <b>Player2:</b>
+  <%= @game.player2_id %>
+</p>
+
+<p>
+  <b>Player1 start mood:</b>
+  <%= @game.player1_start_mood %>
+</p>
+
+<p>
+  <b>Player1 end mood:</b>
+  <%= @game.player1_end_mood %>
+</p>
+
+<p>
+  <b>Player2 start mood:</b>
+  <%= @game.player2_start_mood %>
+</p>
+
+<p>
+  <b>Player2 end mood:</b>
+  <%= @game.player2_end_mood %>
+</p>
+
+<p>
+  <b>Player1 player2 start trust:</b>
+  <%= @game.player1_player2_start_trust %>
+</p>
+
+<p>
+  <b>Player1 player2 end trust:</b>
+  <%= @game.player1_player2_end_trust %>
+</p>
+
+<p>
+  <b>Player2 player1 start trust:</b>
+  <%= @game.player2_player1_start_trust %>
+</p>
+
+<p>
+  <b>Player2 player1 end trust:</b>
+  <%= @game.player2_player1_end_trust %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>

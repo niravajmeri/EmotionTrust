@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Gameboard:</b>
+  <%= @cellcolor.gameboard_id %>
+</p>
+
+<p>
+  <b>Cellnumber:</b>
+  <%= @cellcolor.cellnumber %>
+</p>
+
+<p>
+  <b>Color pallet:</b>
+  <%= @cellcolor.color_pallet_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_cellcolor_path(@cellcolor) %> |
+<%= link_to 'Back', cellcolors_path %>

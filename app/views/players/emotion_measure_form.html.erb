@@ -1,0 +1,1 @@
+<div style="text-align: center; margin: 0 auto; margin-top: 20px;">	<%= form_tag :controller => :players, :action=> :emotion_measure do%>    How do you feel? <br/>		<%@emotions.each do|emotion|%>		<%=radio_button_tag "emotion", emotion.id%> <%=emotion.name%>	<%end%>	<%= hidden_field_tag :id, @game_round.id%>    <%= submit_tag "Submit"%><%end%></div>

@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Game round:</b>
+  <%= @transfer_resource.game_round_id %>
+</p>
+
+<p>
+  <b>Player:</b>
+  <%= @transfer_resource.player_id %>
+</p>
+
+<p>
+  <b>Opponent:</b>
+  <%= @transfer_resource.opponent_id %>
+</p>
+
+<p>
+  <b>Color pallet:</b>
+  <%= @transfer_resource.color_pallet_id %>
+</p>
+
+<p>
+  <b>Quantity:</b>
+  <%= @transfer_resource.quantity %>
+</p>
+
+
+<%= link_to 'Edit', edit_transfer_resource_path(@transfer_resource) %> |
+<%= link_to 'Back', transfer_resources_path %>
