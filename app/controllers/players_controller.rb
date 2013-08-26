@@ -214,6 +214,10 @@ class PlayersController < ApplicationController
 	puts "IN PLAYER GAME BOARD"
 	puts "Game Round Id: #{@game_round_id}"
 
+	@color_pallets = ColorPallet.all
+
+	@player_color_bucket = Hash.new
+	@opponent_color_bucket = Hash.new
 	
 	@player = Player.find(session[:player_id])
 	@game = Game.find(@game_round.game_id)
@@ -224,12 +228,26 @@ class PlayersController < ApplicationController
 		
 		@opponent_start_position = @gameboard.player2_start_position
 		@opponent_current_position = @gameboard.player2_current_position
+
+		@color_pallets.each do|color_pallet|
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+		end
+
+
 	else
 		@player_start_position = @gameboard.player2_start_position
 		@player_current_position = @gameboard.player2_current_position
 				
 		@opponent_start_position = @gameboard.player1_start_position
 		@opponent_current_position = @gameboard.player1_current_position
+
+		@color_pallets.each do|color_pallet|
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+		end
+
+
 	end
 		
 	p @player_current_position
@@ -302,11 +320,13 @@ class PlayersController < ApplicationController
 	@gridsize = @gameboard.gridsize
 	@player_id = session[:player_id]
 	move_check = false
-	
-	
+	@color_pallets = ColorPallet.all
 	
 	@game_round = GameRound.find(@gameboard.game_round_id)
 	@game = Game.find(@game_round.game_id)
+
+	@player_color_bucket = Hash.new
+	@opponent_color_bucket = Hash.new
 
 	
 	if(@game.player1_id == @player_id)
@@ -316,6 +336,12 @@ class PlayersController < ApplicationController
 		
 		#@opponent_start_position = @gameboard.player2_start_position
 		@opponent_current_position = @gameboard.player2_current_position
+
+		@color_pallets.each do|color_pallet|
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+		end
+
 	else
 		#@player_start_position = @gameboard.player2_start_position
 		#@gameboard.player2_current_position = @new_cellnumber
@@ -323,6 +349,11 @@ class PlayersController < ApplicationController
 				
 		#@opponent_start_position = @gameboard.player1_start_position
 		@opponent_current_position = @gameboard.player1_current_position
+
+		@color_pallets.each do|color_pallet|
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id)
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id)
+		end		
 	end
 	
 	@current_cellnumber = @player_current_position
@@ -394,12 +425,13 @@ class PlayersController < ApplicationController
 	@gameboard = Gameboard.find(@gameboard_id)
 	@gridsize = @gameboard.gridsize
 	@player_id = session[:player_id]
-	move_check = false
-	
-	
+	@color_pallets = ColorPallet.all
 	
 	@game_round = GameRound.find(@gameboard.game_round_id)
 	@game = Game.find(@game_round.game_id)
+
+	@player_color_bucket = Hash.new
+	@opponent_color_bucket = Hash.new
 
 	
 	if(@game.player1_id == @player_id)
@@ -409,6 +441,12 @@ class PlayersController < ApplicationController
 		
 		#@opponent_start_position = @gameboard.player2_start_position
 		@opponent_current_position = @gameboard.player2_current_position
+
+		@color_pallets.each do|color_pallet|
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+		end
+
 	else
 		#@player_start_position = @gameboard.player2_start_position
 		#@gameboard.player2_current_position = @new_cellnumber
@@ -416,6 +454,11 @@ class PlayersController < ApplicationController
 				
 		#@opponent_start_position = @gameboard.player1_start_position
 		@opponent_current_position = @gameboard.player1_current_position
+
+		@color_pallets.each do|color_pallet|
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+		end		
 	end
 	
 	@current_cellnumber = @player_current_position
@@ -483,7 +526,7 @@ class PlayersController < ApplicationController
 			
 			player_color_bucket.available_quantity -= 1
 			player_color_bucket.save
-			
+			@player_color_bucket[player_color_bucket.color_pallet_id] -= 1
 		end
 	end
 	
@@ -531,22 +574,65 @@ class PlayersController < ApplicationController
 	
   end
 
+  def transfer_resource_form
+  	#@game = Game.find(params[:id])
+	#@moods = Mood.all
+	@color_pallets = ColorPallet.all
+	
+	
+	respond_to do|format|
+		format.html {render action: "transfer_resource_form"}
+	end
+
+  end
+
   def transfer_resource
   	color_pallet_id = params[:color_pallet_id]
-  	transfer_quantity = params[:transfer_quantity]
-  	opponent_id = params[:opponent_id]
+  	quantity = params[:quantity].to_i
+  	#opponent_id = params[:opponent_id]
   	game_round_id = params[:game_round_id]
   	gameboard_id = params[:gameboard_id]
 
-  	player_color_bucket = PlayerColorBucket.find_by_player_id_and_color_pallet_id_and_game_round_id(opponent_id, color_pallet_id,game_round_id)
-  	player_color_bucket.available_quantity += transfer_quantity
-  	player_color_bucket.save
+  	game = Game.find(params[:game_id])
 
-  	player_communication = PlayerCommunication.new
-  	player_communication.player_id = session[:player_id]
-  	player_communication.game_round_id = game_round_id
-  	player_communication.message = "#{Player.find(opponent_id).name} transferred #{transfer_quantity} #{ColorPallet.find(color_pallet_id).color} to #{Player.find(session[:player_id]).name}"
-  	player_communication.save
+  	player_id = session[:player_id]
+
+  	if game.player1_id == player_id
+  		opponent_id = game.player2_id
+  	else
+  		opponent_id = game.player1_id
+  	end
+
+
+  	player_color_bucket = PlayerColorBucket.find_by_player_id_and_color_pallet_id_and_game_round_id(player_id, color_pallet_id,game_round_id)
+
+  	if quantity > 0 and player_color_bucket.available_quantity >= quantity
+
+		opponent_color_bucket = PlayerColorBucket.find_by_player_id_and_color_pallet_id_and_game_round_id(opponent_id, color_pallet_id,game_round_id)
+  		opponent_color_bucket.available_quantity += quantity
+  		opponent_color_bucket.save
+
+  		player_color_bucket.available_quantity -= quantity
+  		player_color_bucket.save
+
+	  	player_communication = PlayerCommunication.new
+	  	player_communication.player_id = session[:player_id]
+	  	player_communication.game_round_id = game_round_id
+	  	player_communication.message = "#{Player.find(player_id).name} transferred #{quantity} #{ColorPallet.find(color_pallet_id).name} to #{Player.find(opponent_id).name}"
+	  	player_communication.save
+
+	  	transfer_resource = TransferResource.new
+	  	transfer_resource.game_round_id = game_round_id
+	  	transfer_resource.player_id = session[:player_id]
+	  	transfer_resource.opponent_id = opponent_id
+	  	transfer_resource.color_pallet_id = color_pallet_id
+	  	transfer_resource.quantity = quantity
+	  	transfer_resource.save
+  	end
+
+  	#@gameboard = Gameboard.find(params[:gameboard_id])
+	@player_communications = PlayerCommunication.where("game_round_id = ?", @game_round_id)
+
 
   	respond_to do|format|
 		format.html {render action: "player_communication", :layout => false}

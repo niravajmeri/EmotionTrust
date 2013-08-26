@@ -9,21 +9,39 @@
 		//jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
 		//jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
 		//refreshCommunication();
-		//refreshTable();
-
-		
+		//var global_counter = parseInt($('#counter').val());
+		//alert(global_counter);
+		refreshTable();
+		//checkPlayerStatus();
 	});
 
 
+
     function refreshTable(){
-        jQuery('#gameboard').load("game_board?gameboard_id=<%=@gameboard.id%>", function(){
-           setTimeout(refreshTable, 10000);
-        });
+        jQuery('#game').load("game_board?gameboard_id=<%=@gameboard.id%>", function(){
+        	
+           setTimeout(refreshTable, 1000);
+        }
+		
+        );
+        var global_counter = parseInt($('counter').value);
+		//alert(global_counter);
+		var players_status = $('players_status').value;
+			//alert(players_status);
+			
+			if(players_status == "true") {
+
+				$('counter').value = global_counter + 1;
+			}
+			else {
+
+			}
+
     }
 	
 	function refreshCommunication(){
 		jQuery('#player_communication').load("player_communication?gameboard_id=<%=@gameboard.id%>", function(){
-           setTimeout(refreshCommunication, 10000);
+           setTimeout(refreshCommunication, 1000);
 		   jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
         });
 		
@@ -31,27 +49,25 @@
 	}
 	
 	function refreshTableMoveUp(){
-		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=up", function(){
+		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=up", function(){
 		//alert("Up");
         });
 	}
 	function refreshTableMoveDown(){
-		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=down", function(){
+		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=down", function(){
 		//alert("Up");
         });
 	}
 	function refreshTableMoveLeft(){
-		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=left", function(){
+		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=left", function(){
 		//alert("Up");
         });
 	}
 	function refreshTableMoveRight(){
-		jQuery('#gameboard').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=right", function(){
+		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=right", function(){
 		//alert("Up");
         });
 	}
-	
-	
 </script>
 
 <table style="width:100%">
@@ -89,10 +105,12 @@
 		<td style="border-right: 2px solid #CCCCCC; vertical-align: top; ">
 			<div id="playarea">
 				<h2>Play Area</h2>
-					
-				<table id="gameboard">
+				
+				<%= text_field_tag :counter, "0" %>
+				<div id="game">
+
 				<%= render :partial => "gameboard"%>
-				</table>
+				</div>
 				
 				<div id="gamecontrols">
 					
@@ -109,35 +127,6 @@
 					<a id="moveright" href="#"><%=image_tag("right64x64.png")%></a>
 				</div>
 				
-				<div id="playerbucket">
-				
-					<table style="margin: 0px auto; border: 2px solid #A0A0A0; width: 420px;">
-						<tr>
-							<td style="background-color: #CCCCCC;">You</td>
-						<%@color_pallet = ColorPallet.all%>
-						<%@color_pallet.each_with_index do |color, index|%>
-							<td style="width:40px; height:20px; background-color: <%=color.color%> ">
-								<%#=@player1_color_bucket[index]%>
-							</td>
-						<%end%>
-							<td style="background-color: #CCCCCC;">Score</td>
-							<td style="background-color: #CCCCCC;"><%#=player1_score%>-</td>
-						</tr>
-
-						<tr>
-							<td style="background-color: #CCCCCC;">Player 2</td>
-						<%@color_pallet.each_with_index do |color, index|%>
-							<td style="width:40px; height:20px; background-color: <%=color.color%> ">
-								<%#=@player2_color_bucket[index]%>
-							</td>
-						<%end%>
-							<td style="background-color: #CCCCCC;">Score</td>
-							<td style="background-color: #CCCCCC;"><%#=player2_score%>-</td>
-						</tr>
-					</table>
-					
-				</div>
-				
 				
 				
 			</div>		
@@ -151,6 +140,7 @@
 						<%= render :partial => "player_communication"%>
 					</div>
 					<div>
+
 						<%= form_tag "create_player_communication", :method => :get, :remote => true do %>
 							<%= hidden_field_tag :player_id, session[:player_id]%>
 							<%= hidden_field_tag :gameboard_id, @gameboard.id%>
@@ -158,6 +148,11 @@
 							<%= submit_tag "Send", :name => nil %>
 						<% end %>
 					</div>
+					<div>
+						<%= render :partial => "transfer_resource_form"%>
+					</div>
+
+
 					
 				</div>
 
@@ -165,5 +160,4 @@
 
 		</td>
 	</tr>
-</table>	
-
+</table>

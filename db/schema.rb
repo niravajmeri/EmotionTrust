@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130821024133) do
+ActiveRecord::Schema.define(:version => 20130822192300) do
 
   create_table "cellcolors", :force => true do |t|
     t.integer  "gameboard_id"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(:version => 20130821024133) do
     t.string   "color"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "name"
   end
 
   create_table "commitments", :force => true do |t|

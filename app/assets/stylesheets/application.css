@@ -140,13 +140,13 @@ border-right: 2px solid #A0A0A0;
 }
 
 #gameboard{
-width: 320px;
+width: 400px;
 margin: 0px auto;	 
 }
 
 #gameboard td{
-	width: 70px; 
-	height: 70px; 
+	width: 90px; 
+	height: 90px; 
 	border-radius: 5px;
 	padding: 2px;
 	text-align: center;

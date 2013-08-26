@@ -22,6 +22,7 @@ EmotionTrust::Application.routes.draw do
   resources :games
   resources :players
   
+  get "transfer_resource" => "players#transfer_resource", :as => "transfer_resource"
   
   get "create_player_communication" => "players#create_player_communication", :as => "create_player_communication"
   get "player_communication" => "players#player_communication", :as => "player_communication"

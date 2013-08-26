@@ -9,7 +9,7 @@
 .module {
   width: 300px;
   margin: 10px auto;
-  height: 290px;
+  height: 250px;
 }
 
 .top-bar {
@@ -54,7 +54,7 @@
 }
 
 .discussion {
-  height: 280px; 
+  height: 240px; 
   overflow:auto;
   list-style: none;
   background: #e5e5e5;
@@ -135,4 +135,24 @@
 @keyframes pulse {
   from { opacity: 0; }
   to { opacity: 0.5; }
+}
+
+select option[val="1"]{
+    background-color: #CC0000;
+}
+
+select option[val="2"]{
+     background-color: #CC0000;
+}
+
+select option[val="3"]{
+     background-color: #0000CC;
+}
+
+select option[val="4"]{
+     background-color: #CCCC00;
+}
+
+select option[val="5"]{
+     background-color: #00CCCC;
 }
