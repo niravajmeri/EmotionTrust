@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130822192300) do
+ActiveRecord::Schema.define(:version => 20130826202831) do
 
   create_table "cellcolors", :force => true do |t|
     t.integer  "gameboard_id"
@@ -73,6 +73,8 @@ ActiveRecord::Schema.define(:version => 20130822192300) do
     t.datetime "updated_at",               :null => false
     t.integer  "player1_current_position"
     t.integer  "player2_current_position"
+    t.integer  "player1_move_count"
+    t.integer  "player2_move_count"
   end
 
   add_index "gameboards", ["game_round_id"], :name => "FK_gameboards_1"

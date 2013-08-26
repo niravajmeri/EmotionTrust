@@ -1,0 +1,141 @@
+# Place all the behaviors and hooks related to the matching controller here.
+# All this logic will automatically be available in application.js.
+# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+
+#you can now use $ as your jQuery object.
+
+#jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
+#jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
+
+#var global_counter = parseInt($('#counter').val());
+#alert(global_counter);
+
+#checkPlayerStatus();
+refreshTable = ->
+  jQuery("#game").load "game_board?gameboard_id=<%=@gameboard.id%>", ->
+    setTimeout refreshTable, 1000
+
+  global_counter = parseInt($("counter").value)
+  
+  #alert(global_counter);
+  players_status = $("players_status").value
+  
+  #alert(players_status);
+  if players_status is "true"
+    $("counter").value = global_counter + 1
+  else
+
+  #document.getElementById("communication_form").style.display = "block"
+  #document.getElementById("transfer_form").style.display = "block"
+  #document.getElementById("gamecontrols").style.display = "block"
+  
+  #alert("hi");
+  strategy_phase_count = 30
+  communication_phase_count = 60
+  transfer_phase_count = 90
+  movement_phase_count = 100
+
+  mm = Math.floor((movement_phase_count - global_counter - 1) / 60)
+  ss = (movement_phase_count - global_counter - 1) % 60
+
+  if mm >= 0 and ss >= 0 
+  	mm = "0" + mm  if mm < 10
+  	ss = "0" + ss  if ss < 10
+  	document.getElementById("counter_span").innerHTML = mm + ":" + ss
+  #alert(mm);
+  #alert(ss);
+  
+  
+  #alert(global_counter);
+  if global_counter + 1 <= strategy_phase_count
+    document.getElementById("counter_notification").innerHTML = "Strategy Phase"
+    document.getElementById("strategy_description").style = "background-color: #00CC00"
+  
+  #alert("In IF");
+  else if global_counter + 1 > strategy_phase_count and global_counter + 1 <= communication_phase_count
+    
+    #alert(document.getElementById("strategy_description").style.display);
+    #var s = document.getElementById("strategy_description").style.display;
+    document.getElementById("strategy_description").style = "background-color: #CC0000"
+    document.getElementById("communication_description").style = "background-color: #00CC00"
+    document.getElementById("communication_form").style.display = "block"
+    document.getElementById("counter_notification").innerHTML = "Communication Phase"
+  
+  #if($('strategy_description').style.text-decoration != "line-through") {
+  #	$('strategy_description').style.text-decoration = "line-through";
+  #}
+  
+  #if(document.getElementById("strategy_description").style.display != "none"){
+  #	document.getElementById("strategy_description").style.display = "none";
+  #}
+  else if global_counter + 1 > communication_phase_count and global_counter + 1 <= transfer_phase_count
+    
+    #if($('communication_description').style.text-decoration != "line-through") {
+    #	$('communication_description').style.text-decoration = "line-through";
+    #}
+    document.getElementById("communication_description").style = "background-color: #CC0000"
+    document.getElementById("transfer_description").style = "background-color: #00CC00"
+    document.getElementById("communication_form").style.display = "none"
+    document.getElementById("transfer_form").style.display = "block"
+    document.getElementById("counter_notification").innerHTML = "Transfer Phase"
+  else if global_counter + 1 > transfer_phase_count and global_counter + 1 <= movement_phase_count
+    
+    #if($('transfer_description').style.text-decoration != "line-through") {
+    #	$('transfer_description').style.text-decoration = "line-through";
+    #}
+    
+    #if($('gamecontrols').style.display == "none") {
+    #	$('gamecontrols').style.display="block";	
+    #}
+    document.getElementById("transfer_description").style = "background-color: #CC0000"
+    document.getElementById("movement_description").style = "background-color: #00CC00"
+    document.getElementById("communication_form").style.display = "none"
+    document.getElementById("transfer_form").style.display = "none"
+    document.getElementById("gamecontrols").style.display = "block"
+    document.getElementById("counter_notification").innerHTML = "Movement Phase"
+  else
+    
+    #if($('movement_description').style.text-decoration != "line-through") {
+    #	$('movement_description').style.text-decoration = "line-through";
+    #}
+    document.getElementById("movement_description").style = "background-color: #CC0000"
+    document.getElementById("communication_form").style.display = "none"
+    document.getElementById("transfer_form").style.display = "none"
+    document.getElementById("gamecontrols").style.display = "none"
+    document.getElementById("counter_notification").innerHTML = "Round Over"
+refreshCommunication = ->
+  jQuery("#player_communication").load "player_communication?gameboard_id=<%=@gameboard.id%>", ->
+    setTimeout refreshCommunication, 1000
+    jQuery("#discussion").scrollTop jQuery("#discussion")[0].scrollHeight
+
+
+#jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
+refreshTableMoveUp = ->
+  jQuery("#game").load "moveajax?gameboard_id=<%=@gameboard.id%>&direction=up", ->
+
+
+#alert("Up");
+refreshTableMoveDown = ->
+  jQuery("#game").load "moveajax?gameboard_id=<%=@gameboard.id%>&direction=down", ->
+
+
+#alert("Up");
+refreshTableMoveLeft = ->
+  jQuery("#game").load "moveajax?gameboard_id=<%=@gameboard.id%>&direction=left", ->
+
+
+#alert("Up");
+refreshTableMoveRight = ->
+  jQuery("#game").load "moveajax?gameboard_id=<%=@gameboard.id%>&direction=right", ->
+
+jQuery(document).ready ($) ->
+  body = $("body")
+  jQuery("#moveup").click refreshTableMoveUp
+  jQuery("#movedown").click refreshTableMoveDown
+  jQuery("#moveleft").click refreshTableMoveLeft
+  jQuery("#moveright").click refreshTableMoveRight
+  refreshCommunication()
+  refreshTable()
+
+
+#alert("Up");

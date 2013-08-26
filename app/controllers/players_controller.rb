@@ -351,8 +351,8 @@ class PlayersController < ApplicationController
 		@opponent_current_position = @gameboard.player1_current_position
 
 		@color_pallets.each do|color_pallet|
-			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id)
-			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id)
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
 		end		
 	end
 	
@@ -434,102 +434,156 @@ class PlayersController < ApplicationController
 	@opponent_color_bucket = Hash.new
 
 	
-	if(@game.player1_id == @player_id)
+	if(@game.player1_id == session[:player_id])
+
+		player_id = @game.player1_id
+		opponent_id = @game.player2_id
 	#@player_start_position = @gameboard.player1_start_position
 		#@gameboard.player1_current_position = @new_cellnumber
 		@player_current_position = @gameboard.player1_current_position
+		player_move_count = @gameboard.player1_move_count
+		opponent_move_count = @gameboard.player2_move_count
 		
 		#@opponent_start_position = @gameboard.player2_start_position
 		@opponent_current_position = @gameboard.player2_current_position
 
 		@color_pallets.each do|color_pallet|
-			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
-			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, player_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, opponent_id, color_pallet.id).available_quantity
 		end
 
 	else
+
+		player_id = @game.player2_id
+		opponent_id = @game.player1_id
+
 		#@player_start_position = @gameboard.player2_start_position
 		#@gameboard.player2_current_position = @new_cellnumber
 		@player_current_position = @gameboard.player2_current_position
+		player_move_count = @gameboard.player2_move_count
+		opponent_move_count = @gameboard.player1_move_count
 				
 		#@opponent_start_position = @gameboard.player1_start_position
 		@opponent_current_position = @gameboard.player1_current_position
 
 		@color_pallets.each do|color_pallet|
-			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
-			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, player_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, opponent_id, color_pallet.id).available_quantity
 		end		
 	end
 	
 	@current_cellnumber = @player_current_position
 	p @current_cellnumber
 	
-	
-	if(@direction == "up")
-		if((@current_cellnumber - 1) > @gameboard.gridsize)
-			@new_cellnumber = @current_cellnumber - @gameboard.gridsize
-			move_check = true
-		end
-		
-	elsif(@direction == "down")
-		if((@current_cellnumber- 1) < (@gameboard.gridsize * @gameboard.gridsize))
-			@new_cellnumber = @current_cellnumber + @gameboard.gridsize
-			move_check = true
-		end
-	elsif(@direction == "left")
-		if((@current_cellnumber - 1)% @gameboard.gridsize != 0)
-			@new_cellnumber = @current_cellnumber - 1
-			move_check = true
-		end
-	elsif(@direction == "right")
-		if((@current_cellnumber - 1) % @gameboard.gridsize != (@gameboard.gridsize - 1))
-			@new_cellnumber = @current_cellnumber + 1
-			move_check = true
-		end
+	player_goalcheck = false
+	opponent_goalcheck = false
+
+	if @player_current_position == @gameboard.goal
+		player_goalcheck = true
 	end
-		
-	if move_check
-	
-		#new_cellcolor = Cellcolor.where(gameboard_id: @gameboard.id, cellnumber: @new_cellnumber -1).take
-		#new_cellcolor = Cellcolor.where("gameboard_id = ? AND cellnumber = ?", @gameboard.id, @new_cellnumber-1).take(1)
-		new_cellcolor = Cellcolor.find_by_gameboard_id_and_cellnumber(@gameboard.id, @new_cellnumber-1)
-		#new_cellcolors = Cellcolor.where("gameboard_id = ?", @gameboard.id)
-		p "NEW CELLCOLOR"
-		p new_cellcolor.color_pallet_id
-		
-		#p "NEW CELLCOLORS"
-		#p new_cellcolors
 
-		
-		#player_color_bucket = PlayerColorBucket.where(game_round_id: @gameboard.game_round_id, player_id: session[:player_id], color_pallet_id: new_cellcolor.color_pallet_id).take
-		player_color_bucket = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, session[:player_id], new_cellcolor.color_pallet_id)
+	if @opponent_color_bucket == @gameboard.goal
+		opponent_goalcheck = true
+	end
 
-		p player_color_bucket
+	if not player_goalcheck
 
-		if player_color_bucket != nil and player_color_bucket.available_quantity > 0	
-			if(@game.player1_id == @player_id)
-			#@player_start_position = @gameboard.player1_start_position
-				@gameboard.player1_current_position = @new_cellnumber
-				@player_current_position = @gameboard.player1_current_position
-				
-				#@opponent_start_position = @gameboard.player2_start_position
-				@opponent_current_position = @gameboard.player2_current_position
-			else
-				#@player_start_position = @gameboard.player2_start_position
-				@gameboard.player2_current_position = @new_cellnumber
-				@player_current_position = @gameboard.player2_current_position
-						
-				#@opponent_start_position = @gameboard.player1_start_position
-				@opponent_current_position = @gameboard.player1_current_position
+		if(@direction == "up")
+			if((@current_cellnumber - 1) > @gameboard.gridsize)
+				@new_cellnumber = @current_cellnumber - @gameboard.gridsize
+				move_check = true
 			end
-			@gameboard.save
 			
-			player_color_bucket.available_quantity -= 1
-			player_color_bucket.save
-			@player_color_bucket[player_color_bucket.color_pallet_id] -= 1
+		elsif(@direction == "down")
+			if((@current_cellnumber- 1) < (@gameboard.gridsize * @gameboard.gridsize))
+				@new_cellnumber = @current_cellnumber + @gameboard.gridsize
+				move_check = true
+			end
+		elsif(@direction == "left")
+			if((@current_cellnumber - 1)% @gameboard.gridsize != 0)
+				@new_cellnumber = @current_cellnumber - 1
+				move_check = true
+			end
+		elsif(@direction == "right")
+			if((@current_cellnumber - 1) % @gameboard.gridsize != (@gameboard.gridsize - 1))
+				@new_cellnumber = @current_cellnumber + 1
+				move_check = true
+			end
 		end
+			
+		if move_check
+		
+			#new_cellcolor = Cellcolor.where(gameboard_id: @gameboard.id, cellnumber: @new_cellnumber -1).take
+			#new_cellcolor = Cellcolor.where("gameboard_id = ? AND cellnumber = ?", @gameboard.id, @new_cellnumber-1).take(1)
+			new_cellcolor = Cellcolor.find_by_gameboard_id_and_cellnumber(@gameboard.id, @new_cellnumber-1)
+			#new_cellcolors = Cellcolor.where("gameboard_id = ?", @gameboard.id)
+			p "NEW CELLCOLOR"
+			p new_cellcolor.color_pallet_id
+			
+			#p "NEW CELLCOLORS"
+			#p new_cellcolors
+
+			
+			#player_color_bucket = PlayerColorBucket.where(game_round_id: @gameboard.game_round_id, player_id: session[:player_id], color_pallet_id: new_cellcolor.color_pallet_id).take
+			player_color_bucket = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, session[:player_id], new_cellcolor.color_pallet_id)
+
+			p player_color_bucket
+
+
+
+			if player_color_bucket != nil and player_color_bucket.available_quantity > 0	
+				if(@game.player1_id == @player_id)
+				#@player_start_position = @gameboard.player1_start_position
+					@gameboard.player1_current_position = @new_cellnumber
+					@player_current_position = @gameboard.player1_current_position
+					@gameboard.player1_move_count += 1
+
+					player_move_count = @gameboard.player1_move_count
+					
+					#@opponent_start_position = @gameboard.player2_start_position
+					@opponent_current_position = @gameboard.player2_current_position
+				else
+					#@player_start_position = @gameboard.player2_start_position
+					@gameboard.player2_current_position = @new_cellnumber
+					@player_current_position = @gameboard.player2_current_position
+					@gameboard.player2_move_count += 1
+
+					player_move_count = @gameboard.player2_move_count
+							
+					#@opponent_start_position = @gameboard.player1_start_position
+					@opponent_current_position = @gameboard.player1_current_position
+				end
+				@gameboard.save
+				
+				player_color_bucket.available_quantity -= 1
+				player_color_bucket.save
+				@player_color_bucket[player_color_bucket.color_pallet_id] -= 1
+			end
+
+		end
+
 	end
+
 	
+
+	player_bucket_count = PlayerColorBucket.where(game_round_id: @gameboard.game_round_id, player_id: player_id).pluck(:available_quantity).sum
+	opponent_bucket_count =  PlayerColorBucket.where(game_round_id: @gameboard.game_round_id, player_id: opponent_id).pluck(:available_quantity).sum
+	#player_bucket_count = PlayerColorBucket.find_all_by_game_round_id_and_player_id(@gameboard.game_round_id, session[:player_id]).sum(:available_quantity)
+
+	if player_goalcheck 
+		@player_score = player_bucket_count + (3 * player_move_count)
+	else
+		@player_score = player_bucket_count + (1.5 * player_move_count)	
+	end
+
+	if opponent_goalcheck
+		@opponent_score = opponent_bucket_count + (3 * opponent_move_count)
+	else
+		@opponent_score = opponent_bucket_count + (1.5 * opponent_move_count)	
+	end
+
+	p "player score #{@player_score}"
+
 	#player_communications
 	@player_communications = PlayerCommunication.where("game_round_id = ?", @game_round.id)
 	

@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 	jQuery(document).ready(function($){
 	//you can now use $ as your jQuery object.
 		var body = $( 'body' );
@@ -8,7 +9,7 @@
 		jQuery('#moveright').click(refreshTableMoveRight);
 		//jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
 		//jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
-		//refreshCommunication();
+		refreshCommunication();
 		//var global_counter = parseInt($('#counter').val());
 		//alert(global_counter);
 		refreshTable();
@@ -37,10 +38,37 @@
 
 			}
 
-			var strategy_phase_count = 10;
-			var communication_phase_count = 20;
-			var transfer_phase_count = 30;
-			var movement_phase_count = 40;
+				document.getElementById("communication_form").style.display = "block";
+				document.getElementById("transfer_form").style.display = "block";
+				document.getElementById("gamecontrols").style.display = "block";
+
+				//alert("hi");
+
+				var strategy_phase_count = 30;
+				var communication_phase_count = 60;
+				var transfer_phase_count = 90;
+				var movement_phase_count = 120;
+
+
+				var mm = Math.floor((movement_phase_count - global_counter - 1) / 60); 
+				var ss = (movement_phase_count - global_counter - 1) % 60;
+
+				if(mm >= 0 && ss >= 0) {
+					if(mm < 10) {
+						mm = "0" + mm;
+					}
+
+					if(ss < 10) {
+						ss = "0" + ss;
+					}
+
+					//alert(mm);
+					//alert(ss);
+
+					document.getElementById("counter_span").innerHTML = mm + ":" + ss;
+				}
+
+
 
 			//alert(global_counter);
 
@@ -48,23 +76,23 @@
 
 			if(global_counter+1 <= strategy_phase_count) {
 
-				document.getElementById("counter_notification").innerHTML = "Strategize Now";
+				document.getElementById("counter_notification").innerHTML = "Strategy Phase";
 
 				document.getElementById("strategy_description").style = "background-color: #00CC00";
 				
 				//alert("In IF");
 
 			}
-			else if (global_counter+1 > strategy_phase_count && global_counter <= communication_phase_count){
+			else if (global_counter+1 > strategy_phase_count && global_counter+1 <= communication_phase_count){
 
 				//alert(document.getElementById("strategy_description").style.display);
 				//var s = document.getElementById("strategy_description").style.display;
 
-				document.getElementById("strategy_description").style = "background-color: #CC0000";
+				//document.getElementById("strategy_description").style = "background-color: #CC0000";
 				document.getElementById("communication_description").style = "background-color: #00CC00";
 
 				document.getElementById("communication_form").style.display = "block";
-				document.getElementById("counter_notification").innerHTML = "Communication Phase ON";
+				document.getElementById("counter_notification").innerHTML = "Communication Phase";
 
 
 				//if($('strategy_description').style.text-decoration != "line-through") {
@@ -76,25 +104,25 @@
 				//}
 
 			}
-			else if(global_counter+1 > communication_phase_count && global_counter <= transfer_phase_count) {
+			else if(global_counter+1 > communication_phase_count && global_counter+1 <= transfer_phase_count) {
 
 				//if($('communication_description').style.text-decoration != "line-through") {
 				//	$('communication_description').style.text-decoration = "line-through";
 				//}
 
 
-				document.getElementById("communication_description").style = "background-color: #CC0000";
+				//document.getElementById("communication_description").style = "background-color: #CC0000";
 				document.getElementById("transfer_description").style = "background-color: #00CC00";
 
 
 				document.getElementById("communication_form").style.display = "none";
 				document.getElementById("transfer_form").style.display = "block";
-				document.getElementById("counter_notification").innerHTML = "Transfer Phase ON";
+				document.getElementById("counter_notification").innerHTML = "Transfer Phase";
 
 
 
 			}
-			else if(global_counter+1 > transfer_phase_count && global_counter <= movement_phase_count) {
+			else if(global_counter+1 > transfer_phase_count && global_counter+1 <= movement_phase_count) {
 
 				//if($('transfer_description').style.text-decoration != "line-through") {
 				//	$('transfer_description').style.text-decoration = "line-through";
@@ -105,13 +133,13 @@
 				//	$('gamecontrols').style.display="block";	
 				//}
 
-				document.getElementById("transfer_description").style = "background-color: #CC0000";
+				//document.getElementById("transfer_description").style = "background-color: #CC0000";
 				document.getElementById("movement_description").style = "background-color: #00CC00";
 
 				document.getElementById("communication_form").style.display = "none";
 				document.getElementById("transfer_form").style.display = "none";
 				document.getElementById("gamecontrols").style.display = "block";
-				document.getElementById("counter_notification").innerHTML = "Movement Phase ON";
+				document.getElementById("counter_notification").innerHTML = "Movement Phase";
 
 
 			}
@@ -121,13 +149,13 @@
 				//	$('movement_description').style.text-decoration = "line-through";
 				//}
 
-				document.getElementById("movement_description").style = "background-color: #CC0000";
+				document.getElementById("movement_description").style = "background-color: #00CC00";
 
 
 				document.getElementById("communication_form").style.display = "none";
 				document.getElementById("transfer_form").style.display = "none";
 				document.getElementById("gamecontrols").style.display = "none";
-				document.getElementById("counter_notification").innerHTML = "Game Round Over";
+				document.getElementById("counter_notification").innerHTML = "Round Over";
 
 			}
 
@@ -164,6 +192,7 @@
 		//alert("Up");
         });
 	}
+
 </script>
 
 <table style="width:100%">
@@ -201,16 +230,16 @@
 		<td style="border-right: 2px solid #CCCCCC; vertical-align: top; ">
 			<div id="playarea">
 				<h2>Play Area</h2>
-				<p style="color: #00DD00; font-weight: bold; background-color: #DEDE00;">
-					<%= text_field_tag :counter, "0", :style => "width: 20px; font-size: 12pt; font-weight: bold;" %>
+				<p style="color: #000000; font-weight: bold; background-color: #FEFE00; padding: 3px;">
+					<%= hidden_field_tag :counter, "0", :style => "width: 50px; font-size: 12pt; font-weight: bold;" %>
+					Count: <span id="counter_span"></span>
 					<span id="counter_notification"></span>
 				</p>
 				<div id="game">
-
 				<%= render :partial => "gameboard"%>
 				</div>
 				
-				<div id="gamecontrols" style="display:none; background-color: #DEDE00;">
+				<div id="gamecontrols">
 					
 					<%#=link_to image_tag("up64x64.png"), :controller => :players, :action => :move, :direction => "up", :gameboard_id => @gameboard.id%>
 					<%#=link_to image_tag("down64x64.png"), :controller => :players, :action => :move, :direction => "down", :gameboard_id => @gameboard.id%>
@@ -237,20 +266,19 @@
 					<div  id="player_communication" style="height: 350px;">
 						<%= render :partial => "player_communication"%>
 					</div>
-					<div id="communication_form" style="display: none; background-color: #DEDE00;">
+					<div id="communication_form">
 						<%= form_tag "create_player_communication", :method => :get, :remote => true do %>
 							<%= hidden_field_tag :player_id, session[:player_id]%>
 							<%= hidden_field_tag :gameboard_id, @gameboard.id%>
-							<%= text_field_tag :message, "", :style => "width: 240px; height: 50px; border: 2px solid #D0D0D0;"%>
+							<%= text_field_tag :message, "", :style => "width: 235px; height: 50px; border: 2px solid #D0D0D0;"%>
 							<%= submit_tag "Send", :name => nil %>
 						<% end %>
 					</div>
-					<div id="transfer_form" style="display:none; background-color: #DEDE00">
+					<div id="transfer_form">
 						<%= render :partial => "transfer_resource_form"%>
 					</div>
 
 
-					
 				</div>
 
 			</div>
