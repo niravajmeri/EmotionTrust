@@ -38,9 +38,9 @@
 
 			}
 
-				document.getElementById("communication_form").style.display = "block";
-				document.getElementById("transfer_form").style.display = "block";
-				document.getElementById("gamecontrols").style.display = "block";
+				//document.getElementById("communication_form").style.display = "block";
+				//document.getElementById("transfer_form").style.display = "block";
+				//document.getElementById("gamecontrols").style.display = "block";
 
 				//alert("hi");
 
@@ -157,6 +157,8 @@
 				document.getElementById("gamecontrols").style.display = "none";
 				document.getElementById("counter_notification").innerHTML = "Round Over";
 
+				document.getElementById("overlay").style.display = "block";
+
 			}
 
 
@@ -201,16 +203,16 @@
 			<div id="phases">
 				<h2>Game Phases</h2>
 				<ul>
-					<li id="strategy_description" style="text-decorartion:none;">Strategize
+					<li id="strategy_description" style="text-decorartion:none;"><b>Strategize</b>
 					<p>Players analyse their position on the board and the plates in their bucket, and come up with a strategy to maximise their points.</p>
 					</li>
-					<li id="communication_description" style="text-decorartion:none;">Communicate
+					<li id="communication_description" style="text-decorartion:none;"><b>Communicate</b>
 					<p>Players communicate with each other and mutually agree to transfer plates.</p>
 					</li>
-					<li id="transfer_description" style="text-decorartion:none;">Transfer
+					<li id="transfer_description" style="text-decorartion:none;"><b>Transfer</b>
 					<p>Players transfer the plates agreed upon during the communication phase.</p>
 					</li>
-					<li id="movement_description" style="text-decorartion:none;">Movement
+					<li id="movement_description" style="text-decorartion:none;"><b>Movement</b>
 					<p>Players use the available plates to reach the goal.</p>
 					</li>
 				</ul>
@@ -286,3 +288,5 @@
 		</td>
 	</tr>
 </table>
+
+<div id="overlay" style="display:none;"></div>
