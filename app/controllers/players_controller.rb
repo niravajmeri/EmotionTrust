@@ -161,6 +161,11 @@ class PlayersController < ApplicationController
 	@player_id = session[:player_id]
 	
 	start_end_check = params[:start_end_check]
+
+	p "--------------Mood Measure--------------"
+
+	p start_end_check
+	p params[:mood]
 	
 	if (start_end_check == "start")
 		if @game.player1_id == @player_id
@@ -178,6 +183,7 @@ class PlayersController < ApplicationController
 		end
 
 	end
+	
 	@game.save
 		
 	respond_to do|format|
@@ -222,34 +228,78 @@ class PlayersController < ApplicationController
 	@player = Player.find(session[:player_id])
 	@game = Game.find(@game_round.game_id)
 	
+	player_goalcheck = false
+	opponent_goalcheck = false
+
+
 	if(@game.player1_id == @player.id)
+
+		player_id = @game.player1_id
+		opponent_id = @game.player2_id
+
 		@player_start_position = @gameboard.player1_start_position
 		@player_current_position = @gameboard.player1_current_position
 		
 		@opponent_start_position = @gameboard.player2_start_position
 		@opponent_current_position = @gameboard.player2_current_position
 
+		player_move_count = @gameboard.player1_move_count
+		opponent_move_count = @gameboard.player2_move_count
+
+
 		@color_pallets.each do|color_pallet|
-			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
-			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, player_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, opponent_id, color_pallet.id).available_quantity
 		end
 
-
 	else
+
+		player_id = @game.player2_id
+		opponent_id = @game.player1_id
+
 		@player_start_position = @gameboard.player2_start_position
 		@player_current_position = @gameboard.player2_current_position
 				
 		@opponent_start_position = @gameboard.player1_start_position
 		@opponent_current_position = @gameboard.player1_current_position
 
+		player_move_count = @gameboard.player2_move_count
+		opponent_move_count = @gameboard.player1_move_count
+
 		@color_pallets.each do|color_pallet|
-			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
-			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+			@player_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, player_id, color_pallet.id).available_quantity
+			@opponent_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, opponent_id, color_pallet.id).available_quantity
 		end
 
-
 	end
+
+	player_bucket_count = PlayerColorBucket.where(game_round_id: @gameboard.game_round_id, player_id: player_id).pluck(:available_quantity).sum
+	opponent_bucket_count =  PlayerColorBucket.where(game_round_id: @gameboard.game_round_id, player_id: opponent_id).pluck(:available_quantity).sum
+
+
+
+	if @player_current_position == @gameboard.goal
+		player_goalcheck = true
+	end
+
+	if @opponent_color_position == @gameboard.goal
+		opponent_goalcheck = true
+	end	
 		
+	if player_goalcheck 
+		@player_score = player_bucket_count + (3 * player_move_count)
+	else
+		@player_score = player_bucket_count + (1.5 * player_move_count)	
+	end
+
+	if opponent_goalcheck
+		@opponent_score = opponent_bucket_count + (3 * opponent_move_count)
+	else
+		@opponent_score = opponent_bucket_count + (1.5 * opponent_move_count)	
+	end
+
+
+
 	p @player_current_position
 	p @opponent_current_position
 	
@@ -311,6 +361,15 @@ class PlayersController < ApplicationController
 	#	@gameboard = @gameboard[0]
 	#end
 	
+	#For EMOTION MEASURE AT END
+
+	@emotions = Emotion.all
+	
+	@start_end_check = "end"
+
+	# EMOTION MEASURE
+
+
 	@direction = params[:direction]
 	p @direction
 
@@ -482,7 +541,7 @@ class PlayersController < ApplicationController
 		player_goalcheck = true
 	end
 
-	if @opponent_color_bucket == @gameboard.goal
+	if @opponent_color_position == @gameboard.goal
 		opponent_goalcheck = true
 	end
 
@@ -558,6 +617,11 @@ class PlayersController < ApplicationController
 				player_color_bucket.available_quantity -= 1
 				player_color_bucket.save
 				@player_color_bucket[player_color_bucket.color_pallet_id] -= 1
+
+				if @player_current_position == @gameboard.goal
+					player_goalcheck = true
+				end
+
 			end
 
 		end

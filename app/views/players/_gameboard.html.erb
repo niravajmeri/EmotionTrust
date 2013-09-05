@@ -38,28 +38,28 @@
 
 <div id="playerbucket">
 				
-	<table style="margin: 0px auto; border: 2px solid #A0A0A0; width: 420px;">
+	<table style="margin: 0px auto; border: 2px solid #A0A0A0; width: 420px; color: #FFFFFF; font-weight: bold;">
 		<tr>
-			<td style="background-color: #CCCCCC;">You</td>
+			<td style="background-color: #AAAAAA;">You</td>
 		<%#@color_pallet = ColorPallet.all%>
 		<%@color_pallets.each_with_index do |color, index|%>
 			<td style="width:40px; height:20px; background-color: <%=color.color%> ">
 				<%=@player_color_bucket[color.id]%>
 			</td>
 		<%end%>
-			<td style="background-color: #CCCCCC;">Score</td>
-			<td style="background-color: #CCCCCC;"><%=@player_score%></td>
+			<td style="background-color: #AAAAAA;">Score</td>
+			<td style="background-color: #AAAAAA;"><%=@player_score%></td>
 		</tr>
 
 		<tr>
-			<td style="background-color: #CCCCCC;">Player 2</td>
+			<td style="background-color: #AAAAAA;">Player 2</td>
 		<%@color_pallets.each_with_index do |color, index|%>
 			<td style="width:40px; height:20px; background-color: <%=color.color%> ">
 				<%=@opponent_color_bucket[color.id]%>
 			</td>
 		<%end%>
-			<td style="background-color: #CCCCCC;">Score</td>
-			<td style="background-color: #CCCCCC;"><%=@opponent_score%></td>
+			<td style="background-color: #AAAAAA;">Score</td>
+			<td style="background-color: #AAAAAA;"><%=@opponent_score%></td>
 		</tr>
 	</table>
 					
