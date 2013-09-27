@@ -10,7 +10,10 @@
   </tr>
 
 <% round_check = false%>
-
+<%
+	@player1_total_score = 0
+	@player2_total_score = 0
+%>
 <% @game_rounds.each_with_index do |game_round, index| %>
   <tr>
     <td style="text-align:center;">
@@ -35,9 +38,52 @@
     			Round not initialized
     		<%end%>
     	<%else%>
-    		Round complete
+
+    		<% 
+
+	player1_bucket_count = PlayerColorBucket.where(game_round_id: game_round.id, player_id: @game.player1_id).pluck(:available_quantity).sum
+	player2_bucket_count =  PlayerColorBucket.where(game_round_id: game_round.id, player_id: @game.player2_id).pluck(:available_quantity).sum
+
+	gameboard = Gameboard.find_by_game_round_id(game_round.id)
+
+	player1_goalcheck = false
+	player2_goalcheck = false
+
+	player1_score = 0 
+	player2_score = 0
+
+	if gameboard.player1_current_position == gameboard.goal
+		player1_goalcheck = true
+	end
+
+	if gameboard.player2_current_position == gameboard.goal
+		player2_goalcheck = true
+	end	
+		
+	if player1_goalcheck 
+		player1_score = player1_bucket_count + (3 * gameboard.player1_move_count)
+	else
+		player1_score = player1_bucket_count + (1.5 * gameboard.player1_move_count)	
+	end
+
+	if player2_goalcheck
+		player2_score = player2_bucket_count + (3 * gameboard.player2_move_count)
+	else
+		player2_score = player2_bucket_count + (1.5 * gameboard.player2_move_count)	
+	end
+
+	@player1_total_score = @player1_total_score + player1_score
+	@player2_total_score = @player2_total_score + player2_score
+
+    		%>
+
+    		<%=Player.find(@game.player1_id).name%> : <%=Player.find(@game.player2_id).name%> ::  <%=player1_score%> : <%=player2_score%>
+
     	<%end%>
     </td>
   </tr>
 <% end %>
 </table>
+
+    		<h2>Total Score</h2><h2><%=Player.find(@game.player1_id).name%> : <%=Player.find(@game.player2_id).name%> ::  <%=@player1_total_score%> : <%=@player2_total_score%></h2>
+
