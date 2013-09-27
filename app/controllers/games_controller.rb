@@ -155,7 +155,54 @@ class GamesController < ApplicationController
 				cellcolor.cellnumber = index
 				cellcolor.color_pallet_id = color
 				cellcolor.save
-			end		
+			end
+
+			extra1_player1 = Random.rand(4) + 1
+
+			extra2_player1 = Random.rand(4) + 1
+			while(extra1_player1 != extra2_player1)
+				extra2_player1 = Random.rand(4) + 1
+			end
+
+			extra1_player2 = Random.rand(4) + 1
+			extra2_player2 = Random.rand(4) + 1
+			while(extra1_player2 != extra2_player2)
+				extra2_player2 = Random.rand(4) + 1
+			end
+
+			@color_pallet.each do|color|
+
+				player_color_bucket = PlayerColorBucket.new
+				player_color_bucket.color_pallet_id = color.id
+				player_color_bucket.player_id = @game.player1_id
+				player_color_bucket.game_round_id = @game_round.id
+				
+				if(extra1_player1 == color.id or extra2_player1 == color.id)
+					player_color_bucket.original_quantity = 2
+					player_color_bucket.available_quantity = 2
+				else
+					player_color_bucket.original_quantity = 1
+					player_color_bucket.available_quantity = 1
+				end
+				
+				player_color_bucket.save
+
+				player_color_bucket = PlayerColorBucket.new
+				player_color_bucket.color_pallet_id = color.id
+				player_color_bucket.player_id = @game.player2_id
+				player_color_bucket.game_round_id = @game_round.id
+
+				if(extra1_player2 == color.id or extra2_player2 == color.id)
+					player_color_bucket.original_quantity = 2
+					player_color_bucket.available_quantity = 2
+				else
+					player_color_bucket.original_quantity = 1
+					player_color_bucket.available_quantity = 1
+				end
+
+				player_color_bucket.save
+
+			end
 			
 		end
 		@game.round_generate_status = 1
@@ -168,6 +215,86 @@ class GamesController < ApplicationController
       format.json { head :no_content }
     end
 		
+  end
+
+  def game_copy
+  		game1 = Game.find(13)
+  		game2 = Game.find(15)
+
+  		#game1_rounds = GameRound.find_all_by_game_id(game1.id)
+  		game1_rounds = GameRound.where(game_id: game1.id)
+  		#game2_rounds = GameRound.find_all_by_game_id(game2.id)
+  		game1_rounds.each do|game1_round|
+
+  			p "Game1 Round #{game1_round.id}"
+
+  			game2_round = GameRound.new
+  			game2_round.game_id = game2.id
+  			game2_round.save
+
+  			p "Game2 Round #{game2_round.id}"
+
+  			game1board = Gameboard.find_by_game_round_id(game1_round.id)
+
+  			p "Game1 Board #{game1board.id}"
+
+  			game2board = Gameboard.new
+  			game2board.game_round_id = game2_round.id
+  			game2board.gridsize = game1board.gridsize
+  			game2board.player1_start_position = game1board.player1_start_position
+  			game2board.player2_start_position = game1board.player2_start_position
+  			game2board.player1_current_position = game1board.player1_current_position
+  			game2board.player2_current_position = game1board.player2_current_position
+  			game2board.goal = game1board.goal
+  			game2board.player1_move_count = 0
+  			game2board.player2_move_count = 0
+  			game2board.save
+
+  			p game1board.goal
+  			p game2board.goal
+
+  			p "Game2 Board #{game2board.id}"
+
+  			#cellcolors1 = Cellcolor.find_all_by_gameboard_id(game1board.id)
+  			cellcolors1 = Cellcolor.where(gameboard_id: game1board.id)
+
+  			cellcolors1.each do|cellcolor1|
+  				cellcolor2 = Cellcolor.new
+  				cellcolor2.gameboard_id = game2board.id
+  				cellcolor2.cellnumber = cellcolor1.cellnumber
+  				cellcolor2.color_pallet_id = cellcolor1.color_pallet_id
+  				cellcolor2.save
+  			end
+
+  			#player_color_buckets1 = PlayerColorBucket.find_all_by_gameboard_id(gameboard1.id)
+  			player_color_buckets1 = PlayerColorBucket.where(game_round_id: game1_round.id)
+
+  			player_color_buckets1.each do|player_color_bucket1|
+  				player_color_bucket2 = PlayerColorBucket.new
+  				player_color_bucket2.game_round_id = game2_round.id
+  				if player_color_bucket1.player_id == game1.player1_id
+  					player_color_bucket2.player_id = game2.player1_id
+  				else
+  					player_color_bucket2.player_id = game2.player2_id
+  				end
+  				player_color_bucket2.color_pallet_id = player_color_bucket1.color_pallet_id
+  				player_color_bucket2.available_quantity = player_color_bucket1.available_quantity
+  				player_color_bucket2.original_quantity = player_color_bucket1.original_quantity
+
+  				player_color_bucket2.save
+  			end
+
+  		end
+  		game2.number_of_rounds = game1.number_of_rounds
+  		game2.round_generate_status = true
+  		game2.save
+
+  	respond_to do |format|
+      format.html { redirect_to games_url }
+      format.json { head :no_content }
+    end
+
+
   end
   
 end

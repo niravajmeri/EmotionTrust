@@ -3,7 +3,40 @@
 
 <% if @game_round.player1_status and @game_round.player2_status%>
 	<%= hidden_field_tag :players_status, "true" %>
+
+
+
+<div id="playerbucket">
+				
+	<table style="margin: 0px auto; width: 420px; color: #000000; font-weight: normal; cell-spacing: 0px;">
+		<tr>
+			<td style="background-color: #AAAAAA;">You</td>
+		<%#@color_pallet = ColorPallet.all%>
+		<%@color_pallets.each_with_index do |color, index|%>
+			<td style="width:40px; height:20px; background-color: <%=color.color%>; text-align: center;">
+				<%=@player_color_bucket[color.id]%>
+			</td>
+		<%end%>
+			<td style="background-color: #AAAAAA;">Score</td>
+			<td style="background-color: #AAAAAA;"><%=@player_score%></td>
+		</tr>
+
+		<tr>
+			<td style="background-color: #AAAAAA;">Player 2</td>
+		<%@color_pallets.each_with_index do |color, index|%>
+			<td style="width:40px; height:20px; background-color: <%=color.color%>; text-align: center; ">
+				<%=@opponent_color_bucket[color.id]%>
+			</td>
+		<%end%>
+			<td style="background-color: #AAAAAA;">Score</td>
+			<td style="background-color: #AAAAAA;"><%=@opponent_score%></td>
+		</tr>
+	</table>
+					
+</div>
+
 <%else%>
+	<h2>Waiting for your opponent...</h2>
 	<%= hidden_field_tag :players_status, "false" %>
 <%end%>
 
@@ -36,31 +69,3 @@
 </table>
 </div>
 
-<div id="playerbucket">
-				
-	<table style="margin: 0px auto; border: 2px solid #A0A0A0; width: 420px; color: #FFFFFF; font-weight: bold;">
-		<tr>
-			<td style="background-color: #AAAAAA;">You</td>
-		<%#@color_pallet = ColorPallet.all%>
-		<%@color_pallets.each_with_index do |color, index|%>
-			<td style="width:40px; height:20px; background-color: <%=color.color%> ">
-				<%=@player_color_bucket[color.id]%>
-			</td>
-		<%end%>
-			<td style="background-color: #AAAAAA;">Score</td>
-			<td style="background-color: #AAAAAA;"><%=@player_score%></td>
-		</tr>
-
-		<tr>
-			<td style="background-color: #AAAAAA;">Player 2</td>
-		<%@color_pallets.each_with_index do |color, index|%>
-			<td style="width:40px; height:20px; background-color: <%=color.color%> ">
-				<%=@opponent_color_bucket[color.id]%>
-			</td>
-		<%end%>
-			<td style="background-color: #AAAAAA;">Score</td>
-			<td style="background-color: #AAAAAA;"><%=@opponent_score%></td>
-		</tr>
-	</table>
-					
-</div>

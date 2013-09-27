@@ -7,45 +7,62 @@
 		jQuery('#movedown').click(refreshTableMoveDown);
 		jQuery('#moveleft').click(refreshTableMoveLeft);
 		jQuery('#moveright').click(refreshTableMoveRight);
-		//jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
-		//jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
 		refreshCommunication();
-		//var global_counter = parseInt($('#counter').val());
-		//alert(global_counter);
 		refreshTable();
-		//checkPlayerStatus();
+		//jQuery('#communication_submit').click(clearChatTextbox);
+		jQuery('#emoticons a').click(function() {
+	    var smiley = $(this).attr('title');
+		ins2pos(smiley, 'message');});
+
 	});
 
+	
 
+
+	function ins2pos(str, id) {
+	   var TextArea = document.getElementById(id);
+	   var val = TextArea.value;
+	   var before = val.substring(0, TextArea.selectionStart);
+	   var after = val.substring(TextArea.selectionEnd, val.length);
+	   TextArea.value = before + str + after;
+	}
+
+
+	function clearChatTextbox(){
+		$('message').value = "";
+	}
 
     function refreshTable(){
-        jQuery('#game').load("game_board?gameboard_id=<%=@gameboard.id%>", function(){
-        	
-           setTimeout(refreshTable, 1000);
+
+    	if($('gameround_status').value == "true") {
+
+	        jQuery('#game').load("game_board?gameboard_id=<%=@gameboard.id%>", function($){
+    	       setTimeout(refreshTable, 1000);
+        	}
+        	);
         }
-		
-        );
+
+
         var global_counter = parseInt($('counter').value);
-		//alert(global_counter);
 		var players_status = $('players_status').value;
-			//alert(players_status);
-			
+
+		var strategy_phase_count = 100;
+		//var communication_phase_count = 80;
+		//var transfer_phase_count = 100;
+		var movement_phase_count = 120;
+
+
 		if(players_status == "true") {
 
 			$('counter').value = global_counter + 1;
 		}
 
-		document.getElementById("communication_form").style.display = "block";
-		document.getElementById("transfer_form").style.display = "block";
-		document.getElementById("gamecontrols").style.display = "block";
+		//document.getElementById("communication_form").style.display = "block";
+		//document.getElementById("transfer_form").style.display = "block";
+		//document.getElementById("gamecontrols").style.display = "block";
 
-		var strategy_phase_count = 30;
-		var communication_phase_count = 60;
-		var transfer_phase_count = 75;
-		var movement_phase_count = 90;
-
-		var mm = Math.floor((movement_phase_count - global_counter - 1) / 60); 
-		var ss = (movement_phase_count - global_counter - 1) % 60;
+		var mm = Math.floor((movement_phase_count - global_counter) / 60); 
+		var ss = (movement_phase_count - global_counter) % 60;
 
 		if(mm >= 0 && ss >= 0) {
 			if(mm < 10) {
@@ -55,20 +72,17 @@
 			if(ss < 10) {
 				ss = "0" + ss;
 			}
-
-			//alert(mm);
-			//alert(ss);
-
-			//document.getElementById("counter_span").innerHTML = mm + ":" + ss;
 		}
 
-		if(global_counter+1 <= strategy_phase_count) {
+		//alert("Global: " + global_counter + " Movement " + movement_phase_count);
+
+		if(global_counter <= strategy_phase_count) {
 
 			document.getElementById("counter_notification").innerHTML = "Strategy Phase";
 			document.getElementById("strategy_description").style = "background-color: #99FF00";
 
-			var mm = Math.floor(( strategy_phase_count - global_counter - 1) / 60);
-			var ss = (strategy_phase_count - global_counter - 1) % 60;
+			var mm = Math.floor(( strategy_phase_count - global_counter) / 60);
+			var ss = (strategy_phase_count - global_counter) % 60;
 
 			if(mm >= 0 && ss >= 0) {
 				if(mm < 10) {
@@ -84,10 +98,12 @@
 
 				document.getElementById("counter_span").innerHTML = mm + ":" + ss;
 			}
-
+			if ($('strategy_phase_status').value != "true") {
+				$('strategy_phase_status').value = "true";
+			}
 
 		}
-		else if (global_counter+1 > strategy_phase_count && global_counter+1 <= communication_phase_count) {
+		/*else if (global_counter+1 > strategy_phase_count && global_counter+1 <= communication_phase_count) {
 
 			//alert(document.getElementById("strategy_description").style.display);
 			//var s = document.getElementById("strategy_description").style.display;
@@ -124,6 +140,11 @@
 				document.getElementById("counter_span").innerHTML = mm + ":" + ss;
 			}
 
+			if ($('communication_phase_status').value != "true") {
+				$('strategy_phase_status').value = "false";
+				$('communication_phase_status').value = "true";
+			}
+
 
 		}
 		else if(global_counter+1 > communication_phase_count && global_counter+1 <= transfer_phase_count) {
@@ -158,11 +179,15 @@
 
 				document.getElementById("counter_span").innerHTML = mm + ":" + ss;
 			}
+			if ($('transfer_phase_status').value != "true") {
+				$('communication_phase_status').value = "false";
+				$('transfer_phase_status').value = "true";
+			}
 
 
+		}*/
 
-		}
-		else if(global_counter+1 > transfer_phase_count && global_counter+1 <= movement_phase_count) {
+		else if ((global_counter > strategy_phase_count) && (global_counter <= movement_phase_count)) {
 
 			//if($('transfer_description').style.text-decoration != "line-through") {
 			//	$('transfer_description').style.text-decoration = "line-through";
@@ -173,16 +198,16 @@
 			//	$('gamecontrols').style.display="block";	
 			//}
 
-			document.getElementById("transfer_description").style = "background-color: #CC9900";
-			document.getElementById("movement_description").style = "background-color: #99FF00";
+			//document.getElementById("transfer_description").style = "background-color: #CC9900";
+			//document.getElementById("movement_description").style = "background-color: #99FF00";
 
 			document.getElementById("communication_form").style.display = "none";
 			document.getElementById("transfer_form").style.display = "none";
 			document.getElementById("gamecontrols").style.display = "block";
 			document.getElementById("counter_notification").innerHTML = "Movement Phase";
 
-			var mm = Math.floor((movement_phase_count - global_counter - 1) / 60); 
-			var ss = (movement_phase_count - global_counter - 1) % 60;
+			var mm = Math.floor((movement_phase_count - global_counter) / 60); 
+			var ss = (movement_phase_count - global_counter) % 60;
 
 			if(mm >= 0 && ss >= 0) {
 				if(mm < 10) {
@@ -198,8 +223,10 @@
 
 				document.getElementById("counter_span").innerHTML = mm + ":" + ss;
 			}
-
-
+			if ($('movement_phase_status').value != "true") {
+				$('strategy_phase_status').value = "false";
+				$('movement_phase_status').value = "true";
+			}
 
 		}
 		else {
@@ -209,50 +236,50 @@
 			//}
 
 			document.getElementById("movement_description").style = "background-color: #CC9900";
-
-
 			document.getElementById("communication_form").style.display = "none";
 			document.getElementById("transfer_form").style.display = "none";
 			document.getElementById("gamecontrols").style.display = "none";
 			document.getElementById("counter_notification").innerHTML = "Round Over";
 
 			document.getElementById("overlay").style.display = "block";
+			document.getElementById("overlay-form").style.display = "block";
 
-		}
+			$('gameround_status').value = "false";
+			$('movement_phase_status').value = "false";
+
+		}		
 
     }
 	
 	function refreshCommunication(){
-		jQuery('#player_communication').load("player_communication?gameboard_id=<%=@gameboard.id%>", function(){
-           setTimeout(refreshCommunication, 1000);
-		   jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
-        });
-		
-		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=none", function(){
-		//alert("Up");
-        });
 
-		//jQuery("#communication_module").scrollTop(jQuery("#communication_module")[0].scrollHeight);
+    	//if($('communication_phase_status').value == "true" || $('transfer_phase_status').value == "true") {
+		if($('gameround_status').value == "true") {
+
+			jQuery('#player_communication').load("player_communication?gameboard_id=<%=@gameboard.id%>", function(){
+	           setTimeout(refreshCommunication, 1000);
+			   jQuery("#discussion").scrollTop(jQuery("#discussion")[0].scrollHeight);
+	        });
+				
+			jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=none", function(){
+        	});
+        }
 	}
 	
 	function refreshTableMoveUp(){
 		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=up", function(){
-		//alert("Up");
         });
 	}
 	function refreshTableMoveDown(){
 		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=down", function(){
-		//alert("Up");
         });
 	}
 	function refreshTableMoveLeft(){
 		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=left", function(){
-		//alert("Up");
         });
 	}
 	function refreshTableMoveRight(){
 		jQuery('#game').load("moveajax?gameboard_id=<%=@gameboard.id%>&direction=right", function(){
-		//alert("Up");
         });
 	}
 
@@ -264,58 +291,71 @@
 			<div id="phases">
 				<h2>Game Phases</h2>
 				<ul>
-					<li id="strategy_description" style="text-decorartion:none;"><b>Strategize (30s)</b>
-					<p>Players analyse their position on the board and the plates in their bucket, and come up with a strategy to maximise their points.</p>
-					</li>
-					<li id="communication_description" style="text-decorartion:none;"><b>Communicate (30s)</b>
-					<p>Players communicate with each other and mutually agree to transfer plates.</p>
-					</li>
-					<li id="transfer_description" style="text-decorartion:none;"><b>Transfer (15s)</b>
-					<p>Players transfer the plates agreed upon during the communication phase.</p>
-					</li>
-					<li id="movement_description" style="text-decorartion:none;"><b>Movement (15s)</b>
-					<p>Players use the available plates to reach the goal.</p>
+					<li id="strategy_description" style="text-decorartion:none;"><b>Strategy Phase (100s)</b>
+					<ul>
+						<li>Players analyse their position on the board and the tiles in their bucket, and come up with a strategy to maximise their points.</li>
+						<!--</li>
+						<li id="communication_description" style="text-decorartion:none;"><b>Communicate (40s)</b>-->
+						<li>Players may communicate with each other and mutually agree to exchange tiles.</li>
+						<!--</li>-->
+						<!--<li id="transfer_description" style="text-decorartion:none;"><b>Transfer (20s)</b>-->
+						<li>Players may transfer the tiles.</li>
+					</ul>
+					<!--</li>-->
+					<li id="movement_description" style="text-decorartion:none;"><b>Movement Phase (20s)</b>
+						<ul>
+							<li>Players use the available tiles to reach the goal.</li>
+						</ul>
 					</li>
 				</ul>
 				
-				<h3>Scoring</h3>
+				<h2>Scoring</h2>
 				<p>
-				For players who did not reach the goal:<br/>
-				SCORE = number of chips you have + 1.5 x number of squares travelled
+				If you do not reach the goal:<br/>
+				SCORE = number of tiles you have + (1.5 x path length)
 				</p>
 				<p>
-				For players who reached the goal:<br/>
-				SCORE = number of chips you have + 3.0 x number of squares travelled
+				If you reach the goal:<br/>
+				SCORE = number of tiles you have + (3.0 x path length)
 				</p>
 				
 			</div>
 		</td>
+		
 		<td style="border-right: 2px solid #CCCCCC; vertical-align: top; ">
 			<div id="playarea">
+				<%= hidden_field_tag :gameround_status, "true" %>
+				<%= hidden_field_tag :strategy_phase_status, "false" %>
+				<%= hidden_field_tag :communication_phase_status, "false" %>
+				<%= hidden_field_tag :transfer_phase_status, "false" %>
+				<%= hidden_field_tag :movement_phase_status, "false" %>
+
 				<h2>Play Area</h2>
-				<div style="color: #000000; font-weight: bold; background-color: #FFFF66; padding: 5px; margin: 0 auto; text-align: center;">
-					<%= hidden_field_tag :counter, "0", :style => "width: 50px; font-size: 12pt; font-weight: bold;" %>
+				<div style="color: #0000FF; font-weight: normal; background-color: #FFFF66; padding: 5px; margin: 0 auto; text-align: center; font-size: 18pt;">
+					<%= hidden_field_tag :counter, "0", :style => "width: 50px; font-size: 12pt; font-weight: normal;" %>
 					<span id="counter_notification"></span> | 
-					Round Timer: <span id="counter_span"></span>
+					Phase Timer: <span id="counter_span" style="color: #FF0000;"></span>
 				</div>
-				<div id="game">
-					<%= render :partial => "gameboard"%>
-				</div>
-				
-				<div id="gamecontrols">
+
+
+				<div id="gamecontrols" style="display:none; margin-top: 3px; ">
 					
 					<%#=link_to image_tag("up64x64.png"), :controller => :players, :action => :move, :direction => "up", :gameboard_id => @gameboard.id%>
 					<%#=link_to image_tag("down64x64.png"), :controller => :players, :action => :move, :direction => "down", :gameboard_id => @gameboard.id%>
 					<%#=link_to image_tag("left64x64.png"), :controller => :players, :action => :move, :direction => "left", :gameboard_id => @gameboard.id%>
 					<%#=link_to image_tag("right64x64.png"), :controller => :players, :action => :move, :direction => "right", :gameboard_id => @gameboard.id%>
 					
-					<%#=link_to_remote "Move Left", :url=>{:action => :move, :direction => "left"}%>
-					
-					<a id="moveup" href="#"><%=image_tag("up64x64.png")%></a>
-					<a id="movedown" href="#"><%=image_tag("down64x64.png")%></a>
-					<a id="moveleft" href="#"><%=image_tag("left64x64.png")%></a>
-					<a id="moveright" href="#"><%=image_tag("right64x64.png")%></a>
+					<a id="moveup" href="#" title="Move up"><%=image_tag "up64x64.png", :style=> "height: 75px; width: 75px; border:1px solid #000000; " %></a>
+					<a id="movedown" href="#" title="Move down"><%=image_tag "down64x64.png", :style=> "height: 75px; width: 75px;  border:1px solid #000000; "%></a>
+					<a id="moveleft" href="#" title="Move left"><%=image_tag "left64x64.png", :style=> "height: 75px; width: 75px;  border:1px solid #000000; "%></a>
+					<a id="moveright" href="#" title="Move right"><%=image_tag "right64x64.png", :style=> "height: 75px; width: 75px;  border:1px solid #000000; "%></a>
+
 				</div>
+
+				<div id="game">
+					<%= render :partial => "gameboard"%>
+				</div>
+				
 				
 			</div>		
 		
@@ -324,18 +364,29 @@
 			<div>
 				<h2>Communication</h2>
 				<div id="communication">
-					<div  id="player_communication" style="height: 350px;">
+					<div  id="player_communication" style="height: 310px;">
 						<%= render :partial => "player_communication"%>
 					</div>
-					<div id="communication_form">
+					<div id="communication_form"  style="display:block;">
 						<%= form_tag "create_player_communication", :method => :get, :remote => true do %>
 							<%= hidden_field_tag :player_id, session[:player_id]%>
 							<%= hidden_field_tag :gameboard_id, @gameboard.id%>
 							<%= text_field_tag :message, "", :style => "width: 235px; height: 50px; border: 2px solid #D0D0D0;"%>
-							<%= submit_tag "Send", :name => nil %>
+
+							<div id="emoticons" style="font-size: 10px; color: #FF0000;">
+							    <a href="#" title=" :) #smile "><%=image_tag "emoticon-smile.png", :alt => ":)", :style => "width: 24px; " %>#smile</a>
+							    <a href="#" title=" :( #sad "><%=image_tag "emoticon-unhappy.png", :alt => ":(", :style => "width: 24px; "  %>#sad</a>
+							    <a href="#" title=" :o #surprised "><%=image_tag "emoticon-surprised.png", :alt => ":o", :style => "width: 24px; " %>#surprised</a>
+							    <a href="#" title=" :p #tongue "><%=image_tag "emoticon-tongue.png", :alt => ":p", :style => "width: 24px; "  %>#tongue</a>
+							    <a href="#" title=" ;) #wink "><%=image_tag "emoticon-wink.png", :alt => ";)", :style => "width: 24px; "  %>#wink</a>
+							    <a href="#" title=" :D #grin "><%=image_tag "emoticon-happy.png", :alt => ":D", :style => "width: 24px; "  %>#grin</a>
+							</div>
+
+
+							<%= submit_tag "Send", :name => nil, :id => "communication_submit" %>
 						<% end %>
 					</div>
-					<div id="transfer_form">
+					<div id="transfer_form" style="display:block;">
 						<%= render :partial => "transfer_resource_form"%>
 					</div>
 
@@ -347,6 +398,8 @@
 	</tr>
 </table>
 
-<div id="overlay" style="display:none;">
+<div id="overlay" style="display:none;"></div>
+
+<div id="overlay-form" style="display:none;">
 	<%= render :partial => "emotion_measure_form"%>
 </div>

@@ -15,6 +15,21 @@ class GameboardsController < ApplicationController
   def show
     @gameboard = Gameboard.find(params[:id])
 
+    @color_pallets = ColorPallet.all
+
+    @player1_color_bucket = Hash.new
+    @player2_color_bucket = Hash.new
+
+    @game_round = GameRound.find(@gameboard.game_round_id)
+    @game = Game.find(@game_round.game_id)
+
+    @color_pallets.each do|color_pallet|
+      @player1_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
+      @player2_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+    end
+
+
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @gameboard }

@@ -127,6 +127,7 @@ class PlayersController < ApplicationController
   def mood_measure_form
 	@game = Game.find(params[:id])
 	@moods = Mood.all
+	@start_end_check = params[:start_end_check]
 	
 	respond_to do|format|
 		format.html {render action: "mood_measure_form"}
@@ -148,7 +149,7 @@ class PlayersController < ApplicationController
 	@game_round = GameRound.find(params[:id])
 	@emotions = Emotions.all
 	
-	@start_end_check = params[:start_end_check]
+	#@start_end_check = params[:start_end_check]
 	
 	respond_to do|format|
 		format.html {render action: "emotion_measure_form"}
@@ -318,11 +319,35 @@ class PlayersController < ApplicationController
 	elsif Game.find(@game_round.game_id).player2_id == @player_id
 		@game_round.player2_player1_emotion = params[:emotion]
 	end
-
+	@game_round.game_round_status = true
 	@game_round.save
 
+	game_round_available = false
+
+	game_rounds = GameRound.find_all_by_game_id(@game_round.game_id)
+
+	game_rounds.each do|game_round|
+		if game_round.game_round_status == false #game_round_status =false indicates round yet to be played
+			game_round_available = true
+			break
+		end
+	end
+
+	if !game_round_available
+		game = Game.find(@game_round.game_id)
+		game.game_status = true
+		game.save
+	end
+
+
 	respond_to do|format|
-		format.html {redirect_to :controller => :players, :action => :player_game_rounds, :id => @game_round.game_id}
+		format.html {
+			if game_round_available
+				redirect_to :controller => :players, :action => :player_game_rounds, :id => @game_round.game_id
+			else
+				redirect_to :controller => :players, :action => :player_games
+			end
+			}
 	end
   end
   

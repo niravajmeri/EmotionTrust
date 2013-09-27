@@ -9,10 +9,10 @@
 				  <td style="background-color: <%=ColorPallet.find(@gameboard.cellcolors[cellnum-1].color_pallet_id).color%>" id='row<%=row%>col<%=col%>'>
 				  <%p "Cellnum #{cellnum} #{@gameboard.cellcolors[cellnum-1].color_pallet_id}"%>
 					<%if(@gameboard.player1_start_position == cellnum)%>
-						<%=image_tag "Picture5.png"%>
+						<%=image_tag "You.png"%>
 					<%end%>
 					<%if(@gameboard.player2_start_position == cellnum)%>
-						<%=image_tag "Picture6.png"%>
+						<%=image_tag "P2.png"%>
 					<%end%>
 					
 					<%if(cellnum == @gameboard.goal)%>
@@ -32,22 +32,22 @@
 		<table style="margin: 0px auto;">
 			<tr>
 				<td>Player 1</td>
-			<%#@color_pallet.each_with_index do |color, index|%>
-				<td style="width:40px; height:20px; background-color: <%#=color%> ">
-					<%#=@player1_color_bucket[index]%>
+			<%@color_pallets.each_with_index do |color, index|%>
+				<td style="width:40px; height:20px; background-color: <%=color.color%> ">
+					<%=@player1_color_bucket[color.id]%>
 				</td>
-			<%#end%>
+			<%end%>
 				<td>Score</td>
 				<td><%#=player1_score%></td>
 			</tr>
 
 			<tr>
 				<td>Player 2</td>
-			<%#@color_pallet.each_with_index do |color, index|%>
-				<td style="width:40px; height:20px; background-color: <%#=color%> ">
-					<%#=@player2_color_bucket[index]%>
+			<%@color_pallets.each_with_index do |color, index|%>
+				<td style="width:40px; height:20px; background-color: <%=color.color%> ">
+					<%=@player2_color_bucket[color.id]%>
 				</td>
-			<%#end%>
+			<%end%>
 				<td>Score</td>
 				<td><%#=player2_score%></td>
 			</tr>
