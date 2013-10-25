@@ -1,5 +1,8 @@
 EmotionTrust::Application.routes.draw do
 
+  get "affect_data_list" => "game_rounds#affect_data_list", :as => "affect_data_list"
+
+
   resources :transfer_resources
 
 

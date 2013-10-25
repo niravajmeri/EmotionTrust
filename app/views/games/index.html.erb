@@ -2,16 +2,17 @@
 
 <table>
   <tr>
+    <th>Game ID</th>
     <th>Player1</th>
     <th>Player2</th>
     <th>Player1 start mood</th>
-    <th>Player1 end mood</th>
+    <!--<th>Player1 end mood</th>-->
     <th>Player2 start mood</th>
-    <th>Player2 end mood</th>
-    <th>Player1 player2 start trust</th>
+    <!--<th>Player2 end mood</th>-->
+    <!--<th>Player1 player2 start trust</th>
     <th>Player1 player2 end trust</th>
     <th>Player2 player1 start trust</th>
-    <th>Player2 player1 end trust</th>
+    <th>Player2 player1 end trust</th>-->
 	<th>Game status</th>
 	<th>Number of rounds</th>
 	<th>Round generate status</th>
@@ -22,16 +23,17 @@
 
 <% @games.each do |game| %>
   <tr>
+    <td><%= game.id%></td>
     <td><%= game.player1.name %></td>
     <td><%= game.player2.name %></td>
     <td><%= game.player1_start_mood %></td>
-    <td><%= game.player1_end_mood %></td>
+    <!--<td><%#= game.player1_end_mood %></td>-->
     <td><%= game.player2_start_mood %></td>
-    <td><%= game.player2_end_mood %></td>
-    <td><%= game.player1_player2_start_trust %></td>
-    <td><%= game.player1_player2_end_trust %></td>
-    <td><%= game.player2_player1_start_trust %></td>
-    <td><%= game.player2_player1_end_trust %></td>
+    <!--<td><%#= game.player2_end_mood %></td>
+    <td><%#= game.player1_player2_start_trust %></td>
+    <td><%#= game.player1_player2_end_trust %></td>
+    <td><%#= game.player2_player1_start_trust %></td>
+    <td><%#= game.player2_player1_end_trust %></td>-->
 	<td><%= game.game_status %></td>
     <td><%= game.number_of_rounds %></td>
 	<td><%= game.round_generate_status %></td>

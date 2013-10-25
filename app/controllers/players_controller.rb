@@ -324,7 +324,7 @@ class PlayersController < ApplicationController
 
 	game_round_available = false
 
-	game_rounds = GameRound.find_all_by_game_id(@game_round.game_id)
+	game_rounds = GameRound.where(game_id: @game_round.game_id)
 
 	game_rounds.each do|game_round|
 		if game_round.game_round_status == false #game_round_status =false indicates round yet to be played

@@ -218,8 +218,60 @@ class GamesController < ApplicationController
   end
 
   def game_copy
-  		game1 = Game.find(13)
-  		game2 = Game.find(15)
+    game_copy_by_id(7,16)
+    game_copy_by_id(8,17)
+    game_copy_by_id(9,18)
+    game_copy_by_id(10,19)
+    game_copy_by_id(11,20)
+    game_copy_by_id(12,21)
+    game_copy_by_id(13,22)
+    game_copy_by_id(14,23)
+    game_copy_by_id(15,24)
+
+    game_copy_by_id(7,25)
+    game_copy_by_id(8,26)
+    game_copy_by_id(9,27)
+    game_copy_by_id(10,28)
+    game_copy_by_id(11,29)
+    game_copy_by_id(12,30)
+    game_copy_by_id(13,31)
+    game_copy_by_id(14,32)
+    game_copy_by_id(15,33)
+
+    game_copy_by_id(7,34)
+    game_copy_by_id(8,35)
+    game_copy_by_id(9,36)
+    game_copy_by_id(10,37)
+    game_copy_by_id(11,38)
+    game_copy_by_id(12,39)
+    game_copy_by_id(13,40)
+    game_copy_by_id(14,41)
+    game_copy_by_id(15,42)
+
+    game_copy_by_id(7,43)
+    game_copy_by_id(8,44)
+    game_copy_by_id(9,45)
+    game_copy_by_id(10,46)
+    game_copy_by_id(11,47)
+    game_copy_by_id(12,48)
+    game_copy_by_id(13,49)
+    game_copy_by_id(14,50)
+    game_copy_by_id(15,51)
+
+    respond_to do |format|
+      format.html { redirect_to games_url }
+      format.json { head :no_content }
+    end
+
+    
+  end
+
+  def game_copy_by_id(from_id,to_id)
+
+    p "Copying Game #{from_id} to Game #{to_id}"
+
+  		game1 = Game.find(from_id)
+  		game2 = Game.find(to_id)
 
   		#game1_rounds = GameRound.find_all_by_game_id(game1.id)
   		game1_rounds = GameRound.where(game_id: game1.id)
@@ -243,8 +295,8 @@ class GamesController < ApplicationController
   			game2board.gridsize = game1board.gridsize
   			game2board.player1_start_position = game1board.player1_start_position
   			game2board.player2_start_position = game1board.player2_start_position
-  			game2board.player1_current_position = game1board.player1_current_position
-  			game2board.player2_current_position = game1board.player2_current_position
+  			game2board.player1_current_position = game1board.player1_start_position
+  			game2board.player2_current_position = game1board.player2_start_position
   			game2board.goal = game1board.goal
   			game2board.player1_move_count = 0
   			game2board.player2_move_count = 0
@@ -278,7 +330,7 @@ class GamesController < ApplicationController
   					player_color_bucket2.player_id = game2.player2_id
   				end
   				player_color_bucket2.color_pallet_id = player_color_bucket1.color_pallet_id
-  				player_color_bucket2.available_quantity = player_color_bucket1.available_quantity
+  				player_color_bucket2.available_quantity = player_color_bucket1.original_quantity
   				player_color_bucket2.original_quantity = player_color_bucket1.original_quantity
 
   				player_color_bucket2.save
@@ -288,12 +340,6 @@ class GamesController < ApplicationController
   		game2.number_of_rounds = game1.number_of_rounds
   		game2.round_generate_status = true
   		game2.save
-
-  	respond_to do |format|
-      format.html { redirect_to games_url }
-      format.json { head :no_content }
-    end
-
 
   end
   

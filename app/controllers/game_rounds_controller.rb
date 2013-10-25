@@ -80,4 +80,25 @@ class GameRoundsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def affect_data_list
+    @game_rounds = GameRound.where("game_id > ?", 6)
+    @games = Game.where("id > ?", 6)
+
+    trust_change = Array.new
+    mood_change = Array.new
+
+    start_trust = 0
+    start_mood = 0 
+
+    end_trust = 0
+    end_mood = 0
+
+    respond_to do|format|
+      format.html {render action: "affect_data_list", :layout => false}
+    end
+
+
+  end
+
 end

@@ -1,0 +1,282 @@
+<!-- <table border=1>
+  <tr>
+    <th>Game</th>
+    <th>Game Round</th>
+    <th>P-A</th>
+    <th>P-B</th>
+    
+    <th>Commitment-AB</th>
+    <th>Emotion-BA</th>
+ 
+    <th>StartM-B</th>
+    <th>EndM-B</th>
+    <th>ChangeM-B</th>
+ 
+    <th>StartT-B</th>
+    <th>EndtT-B</th>
+    <th>ChangeT-B</th>
+    
+    <th>StartM-A</th>
+    <th>EndM-A</th>
+    <th>ChangeM-A</th>
+    
+    <th>Commitment-BA</th>
+    <th>Emotion-AB</th>
+ 
+    <th>StartT-A</th>
+    <th>EndtT-A</th>
+    <th>ChangeT-A</th>
+ 
+  </tr>
+
+<% index = 0 %>
+<% @games.each do |game| %>
+<%player1_start_mood = game.player1_start_mood%>
+<%player2_start_mood = game.player2_start_mood%>
+
+    <%game_rounds = GameRound.where(game_id: game.id)%>
+
+    <%game_rounds.each do |game_round|%>
+  <tr>
+    <td><%= game_round.game_id %></td>
+    <td><%= game_round.id%></td>
+    <td><%= game.player1_id %></td>
+    <td><%= game.player2_id %></td>
+    
+    <td>C_<%=Player.find(game.player1_id).name %>-<%=Player.find(game.player2_id).name %></td>
+    <td>E_<%=Player.find(game.player1_id).name %>-<%=Player.find(game.player2_id).name %></td>
+
+    <td><%= player2_start_mood%></td>
+    <td><%= game_round.player2_player1_emotion %></td>
+    <td><%= game_round.player2_player1_emotion - player2_start_mood%></td>
+    
+    <td><%= game_round.player2_player1_expectation %></td>
+    <td><%if ((index+1)%5!=0) %><%= @game_rounds[index+1].player2_player1_expectation%><%end%></td>
+    <td><%if ((index+1)%5!=0) %><%= @game_rounds[index+1].player2_player1_expectation - game_round.player2_player1_expectation %><%end%></td>
+
+    <td><%=player1_start_mood%></td>
+    <td><%= game_round.player1_player2_emotion%></td>
+    <td><%= game_round.player1_player2_emotion - player1_start_mood%></td>
+
+    <td>C_<%=Player.find(game.player2_id).name %>-<%=Player.find(game.player1_id).name %></td>
+    <td>E_<%=Player.find(game.player2_id).name %>-<%=Player.find(game.player1_id).name %></td>
+    
+    <td><%= game_round.player1_player2_expectation %></td>
+    <td><%if ((index+1)%5!=0) %><%= @game_rounds[index+1].player1_player2_expectation%><%end%></td>
+    <td><%if ((index+1)%5!=0) %><%= @game_rounds[index+1].player1_player2_expectation - game_round.player1_player2_expectation %><%end%></td>
+
+
+  </tr>
+
+    <%player1_start_mood = game_round.player1_player2_emotion%>
+    <%player2_start_mood = game_round.player2_player1_emotion%>
+
+<% index+=1%>
+    <%end%>
+
+
+
+<% end %>
+    
+
+</table>
+
+
+
+<hr/>
+
+-->
+
+<table border=1>
+  <tr>
+    <th>Game</th>
+    <th>Game Round</th>
+    <th>P-A</th>
+    <th>P-B</th>
+    
+    <th>Commitment-AB</th>
+    
+    <th>StartM-B</th>
+    <th>EndM-B</th>
+    <th>ChangeM-B</th>
+
+    <th>Goal Reach?</th>
+
+ 
+    <th>StartT-B</th>
+    <th>EndtT-B</th>
+    <th>ChangeT-B</th>
+
+    <th>Emotion-BA</th>
+
+    <th>StartM-A</th>
+    <th>EndM-A</th>
+    <th>ChangeM-A</th>
+
+    <th>Mood B (Abs + Change)</th>
+    <th>Trust B (Abs + Change)</th>
+    <th>P-A Tiles Sent</th>
+    <th>P-B Tiles Sent</th>
+     
+  </tr>
+
+<% index = 0 %>
+<% @games.each do |game| %>
+<%player1_start_mood = game.player1_start_mood%>
+<%player2_start_mood = game.player2_start_mood%>
+
+    <%game_rounds = GameRound.where(game_id: game.id)%>
+
+    <%game_rounds.each_with_index do |game_round,index|%>
+    <%if (index+1) % 5 == 1 or (index+1) % 5 == 0
+    %>
+        <tr>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+    <%    
+        next
+      end
+    %>
+    <% gameboard = Gameboard.find_by_game_round_id(game_round.id)%>
+  <tr>
+    <td><%= game_round.game_id %></td>
+    <td><%= game_round.id%></td>
+    <td><%= Player.find(game.player1_id).name %></td>
+    <td><%= Player.find(game.player2_id).name %></td>
+    
+    <td><%#=Player.find(game.player1_id).name %><%#=Player.find(game.player2_id).name %> <%  if(TransferResource.where(player_id: game.player1_id, game_round_id: game_round.id).size > 0)%>Satisfy<%end%></td>
+
+    <td><%= player2_start_mood%></td>
+    <td><%= game_round.player2_player1_emotion %></td>
+    <td><% p2_mood_change = game_round.player2_player1_emotion - player2_start_mood%><%= p2_mood_change%></td>
+    
+    <td><% if(gameboard.goal == gameboard.player2_current_position)%>True<%else%>False<%end%></td>
+
+
+    <td><%= game_round.player2_player1_expectation %></td>
+    <td><%if ((index+1)%5!=0) %>
+            <% p2_end_trust = @game_rounds[index+1].player2_player1_expectation%>
+            <%= p2_end_trust%>
+        <%end%></td>
+    <td><%if ((index+1)%5!=0) %>
+            <% p2_trust_change = @game_rounds[index+1].player2_player1_expectation - game_round.player2_player1_expectation %>
+            <%= p2_trust_change%>
+            <%end%></td>
+
+    
+    <td>E_<%=Player.find(game.player2_id).name %>-<%=Player.find(game.player1_id).name %></td>
+
+    <td><%=player1_start_mood%></td>
+    <td><%= game_round.player1_player2_emotion%></td>
+    <td><% p1_mood_change = game_round.player1_player2_emotion - player1_start_mood%><%= p1_mood_change%></td>
+    <!--<td rowspan=2>
+        <%
+        player_communications = PlayerCommunication.where(game_round_id: game_round.id)
+        %>
+
+            <%player_communications.each do |player_communication|%>
+                <%= Player.find(player_communication.player_id).name%>:
+                <% if player_communication 
+                    message = player_communication.message
+                    end%>
+                <%= message%>
+                <br/>
+            <%end%>    
+    </td>-->
+    
+    <td>
+        <% if p2_mood_change == 0 %> Neutral
+        <% elsif game_round.player2_player1_emotion > 3%> Positive
+        <% else%> Negative
+        <% end%>
+    </td>
+
+    <td>
+        <%if ((index+1)%5!=0) %>
+        <% if p2_trust_change == 0 %> Neutral
+        <% elsif p2_end_trust > 3%> Positive
+        <% else%> Negative
+        <% end%>
+        <%end%>
+    </td>
+
+    <td>
+        <%=TransferResource.where(player_id: game.player1_id, game_round_id: game_round.id).pluck(:quantity).sum%>        
+    </td>
+
+    <td>
+        <%=TransferResource.where(player_id: game.player2_id, game_round_id: game_round.id).pluck(:quantity).sum%>      
+    </td>
+    
+  </tr>
+
+  <tr>
+
+    <td><%= game_round.game_id %></td>
+    <td><%= game_round.id%></td>
+    <td><%= Player.find(game.player2_id).name %></td>
+    <td><%= Player.find(game.player1_id).name %></td>
+    
+    <td><%#=Player.find(game.player2_id).name %><%#=Player.find(game.player1_id).name %> <%  if(TransferResource.where(player_id: game.player2_id, game_round_id: game_round.id).size > 0)%>Satisfy<%end%></td>
+    
+    <td><%= player1_start_mood%></td>
+    <td><%= game_round.player1_player2_emotion %></td>
+    <td><%= game_round.player1_player2_emotion - player1_start_mood%></td>
+    
+    <td><% if(gameboard.goal == gameboard.player1_current_position)%>True<%else%>False<%end%></td>
+
+    <td><%= game_round.player1_player2_expectation %></td>
+    <td><%if ((index+1)%5!=0) %>
+        <% p1_end_trust = @game_rounds[index+1].player1_player2_expectation%><%= p1_end_trust%>
+        <%end%></td>
+    <td><%if ((index+1)%5!=0) %><% p1_trust_change = @game_rounds[index+1].player1_player2_expectation - game_round.player1_player2_expectation %>
+        <%= p1_trust_change%>
+        <%end%></td>
+
+    <td>E_<%=Player.find(game.player1_id).name %>-<%=Player.find(game.player2_id).name %></td>
+
+    <td><%=player2_start_mood%></td>
+    <td><%= game_round.player2_player1_emotion%></td>
+    <td><%= game_round.player2_player1_emotion - player2_start_mood%></td>
+    
+    <td>
+        <% if p1_mood_change == 0 %> Neutral
+        <% elsif game_round.player1_player2_emotion > 3%> Positive
+        <% else%> Negative
+        <% end%>
+    </td>
+
+    <td>
+        <%if ((index+1)%5!=0) %>
+        <% if p1_trust_change == 0 %> Neutral
+        <% elsif p1_end_trust > 3%> Positive
+        <% else%> Negative
+        <% end%>
+        <%end%>
+    </td>
+
+    <td>
+        <%=TransferResource.where(player_id: game.player2_id, game_round_id: game_round.id).pluck(:quantity).sum%>        
+    </td>
+
+    <td>
+        <%=TransferResource.where(player_id: game.player1_id, game_round_id: game_round.id).pluck(:quantity).sum%>        
+    </td>
+
+  </tr>
+
+    <%player1_start_mood = game_round.player1_player2_emotion%>
+    <%player2_start_mood = game_round.player2_player1_emotion%>
+
+<% index+=1%>
+    <%end%>
+
+
+
+<% end %>
+    
+
+</table>

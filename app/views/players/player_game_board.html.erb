@@ -81,6 +81,10 @@
 			document.getElementById("counter_notification").innerHTML = "Strategy Phase";
 			document.getElementById("strategy_description").style = "background-color: #99FF00";
 
+			document.getElementById("communication_form").style.display = "block";
+			document.getElementById("transfer_form").style.display = "block";
+			
+
 			var mm = Math.floor(( strategy_phase_count - global_counter) / 60);
 			var ss = (strategy_phase_count - global_counter) % 60;
 
@@ -370,26 +374,27 @@
 					<div  id="player_communication" style="height: 310px;">
 						<%= render :partial => "player_communication"%>
 					</div>
-					<div id="communication_form"  style="display:block;">
+					<div id="communication_form"  style="display:none;">
 						<%= form_tag "create_player_communication", :method => :get, :remote => true do %>
 							<%= hidden_field_tag :player_id, session[:player_id]%>
 							<%= hidden_field_tag :gameboard_id, @gameboard.id%>
 							<%= text_field_tag :message, "", :style => "width: 235px; height: 50px; border: 2px solid #D0D0D0;"%>
 
 							<div id="emoticons" style="font-size: 10px; color: #FF0000;">
-							    <a href="#" title=" :) #smile "><%=image_tag "emoticon-smile.png", :alt => ":)", :style => "width: 24px; " %>#smile</a>
-							    <a href="#" title=" :( #sad "><%=image_tag "emoticon-unhappy.png", :alt => ":(", :style => "width: 24px; "  %>#sad</a>
-							    <a href="#" title=" :o #surprised "><%=image_tag "emoticon-surprised.png", :alt => ":o", :style => "width: 24px; " %>#surprised</a>
-							    <a href="#" title=" :p #tongue "><%=image_tag "emoticon-tongue.png", :alt => ":p", :style => "width: 24px; "  %>#tongue</a>
-							    <a href="#" title=" ;) #wink "><%=image_tag "emoticon-wink.png", :alt => ";)", :style => "width: 24px; "  %>#wink</a>
-							    <a href="#" title=" :D #grin "><%=image_tag "emoticon-happy.png", :alt => ":D", :style => "width: 24px; "  %>#grin</a>
+							    <a href="#" title=" :-) #smile "><%=image_tag "emoticon-smile.png", :alt => ":)", :style => "width: 24px; " %>#smile</a>
+							    <a href="#" title=" :-( #sad "><%=image_tag "emoticon-unhappy.png", :alt => ":(", :style => "width: 24px; "  %>#sad</a>
+							    <a href="#" title=" :-o #surprised "><%=image_tag "emoticon-surprised.png", :alt => ":o", :style => "width: 24px; " %>#surprised</a>
+							    <a href="#" title=" :-p #tongue "><%=image_tag "emoticon-tongue.png", :alt => ":p", :style => "width: 24px; "  %>#tongue</a>
+							    <a href="#" title=" ;-) #wink "><%=image_tag "emoticon-wink.png", :alt => ";)", :style => "width: 24px; "  %>#wink</a>
+							    <a href="#" title=" :-D #grin "><%=image_tag "emoticon-happy.png", :alt => ":D", :style => "width: 24px; "  %>#grin</a>
+							    <a href="#" title=" X-( #angry "> <b>X-(</b> #angry</a>
 							</div>
 
 
 							<%= submit_tag "Send", :name => nil, :id => "communication_submit" %>
 						<% end %>
 					</div>
-					<div id="transfer_form" style="display:block;">
+					<div id="transfer_form" style="display:none;">
 						<%= render :partial => "transfer_resource_form"%>
 					</div>
 

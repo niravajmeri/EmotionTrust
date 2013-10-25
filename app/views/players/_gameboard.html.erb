@@ -22,7 +22,7 @@
 		</tr>
 
 		<tr>
-			<td style="background-color: #AAAAAA;">Player 2</td>
+			<td style="background-color: #AAAAAA;">Opponent</td>
 		<%@color_pallets.each_with_index do |color, index|%>
 			<td style="width:40px; height:20px; background-color: <%=color.color%>; text-align: center; ">
 				<%=@opponent_color_bucket[color.id]%>
@@ -53,7 +53,7 @@
 						<%=image_tag "You.png"%>
 					<%end%>
 					<%if(@opponent_current_position == cellnum)%>
-						<%=image_tag "P2.png"%>
+						<%=image_tag "Opp.png"%>
 					<%end%>
 					
 					<%if(cellnum == @gameboard.goal)%>
