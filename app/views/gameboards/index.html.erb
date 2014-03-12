@@ -2,7 +2,8 @@
 
 <table>
   <tr>
-    <th>Game round</th>
+    <th>Gameboard ID</th>
+    <th>Game round ID</th>
     <th>Gridsize</th>
     <th>Player1 start position</th>
     <th>Player2 start position</th>
@@ -14,6 +15,7 @@
 
 <% @gameboards.each do |gameboard| %>
   <tr>
+    <td><%= gameboard.id %></td>
     <td><%= gameboard.game_round_id %></td>
     <td><%= gameboard.gridsize %></td>
     <td><%= gameboard.player1_start_position %></td>

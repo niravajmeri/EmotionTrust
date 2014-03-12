@@ -24,8 +24,8 @@ class GameboardsController < ApplicationController
     @game = Game.find(@game_round.game_id)
 
     @color_pallets.each do|color_pallet|
-      @player1_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).available_quantity
-      @player2_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).available_quantity
+      @player1_color_bucket[color_pallet.id] = PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player1_id, color_pallet.id).original_quantity
+      @player2_color_bucket[color_pallet.id] =  PlayerColorBucket.find_by_game_round_id_and_player_id_and_color_pallet_id(@gameboard.game_round_id, @game.player2_id, color_pallet.id).original_quantity
     end
 
 
