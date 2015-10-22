@@ -39,7 +39,10 @@
 	<h2>Waiting for your opponent...</h2>
 	<%= hidden_field_tag :players_status, "false" %>
 <%end%>
-
+<!--<p>In Gameboard
+<%#=@player_current_position%>
+<%#=@opponent_current_position%>
+<p>-->
 <table id="gameboard">
 <%for row in 1..@gameboard.gridsize%>
   <tr>

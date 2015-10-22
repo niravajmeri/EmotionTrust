@@ -286,7 +286,14 @@ class PlayersController < ApplicationController
 	if @opponent_color_position == @gameboard.goal
 		opponent_goalcheck = true
 	end	
-		
+  
+  p "--PLAYER MOVE COUNT--"
+  p player_move_count	
+	
+  p "--PLAYER BUCKET COUNT--"
+  p player_bucket_count	
+	
+
 	if player_goalcheck 
 		@player_score = player_bucket_count + (3 * player_move_count)
 	else

@@ -108,6 +108,13 @@ class GamesController < ApplicationController
 					
 			@gameboard.player1_start_position = 1 + Random.rand(2)
 			@gameboard.player2_start_position = 3 + Random.rand(2)
+
+      @gameboard.player1_current_position = @gameboard.player1_start_position
+	    @gameboard.player2_current_position = @gameboard.player2_start_position
+   
+      @gameboard.player1_move_count = 0
+      @gameboard.player2_move_count = 0
+
 			#while(@player_position[0] == @player_position[1])
 			#	@player_position[1] = 1 + Random.rand(3)
 			#end

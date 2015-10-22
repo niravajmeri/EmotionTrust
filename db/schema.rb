@@ -21,8 +21,6 @@ ActiveRecord::Schema.define(:version => 20130826202831) do
     t.datetime "updated_at",      :null => false
   end
 
-  add_index "cellcolors", ["gameboard_id"], :name => "FK_cellcolors_1"
-
   create_table "color_pallets", :force => true do |t|
     t.string   "color"
     t.datetime "created_at", :null => false
@@ -61,8 +59,6 @@ ActiveRecord::Schema.define(:version => 20130826202831) do
     t.boolean  "player2_status"
   end
 
-  add_index "game_rounds", ["game_id"], :name => "FK_game_rounds_1"
-
   create_table "gameboards", :force => true do |t|
     t.integer  "game_round_id"
     t.integer  "gridsize"
@@ -76,8 +72,6 @@ ActiveRecord::Schema.define(:version => 20130826202831) do
     t.integer  "player1_move_count"
     t.integer  "player2_move_count"
   end
-
-  add_index "gameboards", ["game_round_id"], :name => "FK_gameboards_1"
 
   create_table "games", :force => true do |t|
     t.integer  "player1_id"
@@ -113,8 +107,6 @@ ActiveRecord::Schema.define(:version => 20130826202831) do
     t.integer  "available_quantity"
   end
 
-  add_index "player_color_buckets", ["game_round_id"], :name => "FK_player_color_buckets_1"
-
   create_table "player_communications", :force => true do |t|
     t.integer  "game_round_id"
     t.integer  "player_id"
@@ -128,13 +120,10 @@ ActiveRecord::Schema.define(:version => 20130826202831) do
     t.string   "email"
     t.string   "gender"
     t.string   "country"
-    t.datetime "created_at",               :null => false
-    t.datetime "updated_at",               :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
     t.boolean  "login_status"
     t.boolean  "admin_status"
-    t.string   "player1_current_position"
-    t.string   "integer"
-    t.string   "player2_current_position"
   end
 
   create_table "transfer_resources", :force => true do |t|
